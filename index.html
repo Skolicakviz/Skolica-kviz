@@ -498,3 +498,1380 @@
     .opt-btn.eliminated {
       opacity: 0.3;
       text-decoration: line-through;
+      pointer-events: none;
+    }
+
+    .jokers-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .sentence-display {
+      background: #f1f5f9;
+      border: 2px solid #94a3b8;
+      border-radius: 14px;
+      padding: 18px;
+      font-size: clamp(1.25rem, 3vw, 1.7rem);
+      letter-spacing: 3px;
+      font-weight: 900;
+      line-height: 1.5;
+      text-align: center;
+      color: #0f172a;
+      margin-bottom: 14px;
+      word-break: break-word;
+    }
+
+    .sentence-input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .alpha-pad {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .alpha-key {
+      padding: 10px 4px;
+      border-radius: 10px;
+      border: 1.5px solid #94a3b8;
+      background: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      min-height: 42px;
+      cursor: pointer;
+      color: #0f172a;
+    }
+
+    .alpha-key:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .did-you-know {
+      margin-top: 14px;
+      background: #fefce8;
+      border: 2px solid #facc15;
+      border-radius: 14px;
+      padding: 14px;
+      color: #422006;
+    }
+
+    .did-you-know-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .history-item {
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.96rem;
+      z-index: 999;
+      transition: transform 0.22s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+      max-width: 92vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--panel-bg);
+      color: var(--panel-text);
+      border-radius: var(--radius);
+      max-width: 480px;
+      width: 100%;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+    <header class="topbar">
+      <div class="brand" onclick="showScreen('start')" style="cursor:pointer;">
+        <div class="brand-badge">Š</div>
+        <div>
+          <h1>ŠKOLICA</h1>
+          <small id="weeklyLabel">Tjedni ciklus • Pon–Ned</small>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="pill">🏆 <strong id="topPoints">0</strong> bod.</div>
+        <div class="pill">🎟️ Partije danas: <strong id="topGames">3/3</strong></div>
+        <div class="pill">🏅 Rang: <strong id="topRank">Bakar</strong></div>
+        <button class="btn btn-ghost btn-sm" id="fontSizeBtn" onclick="cycleFontScale()">🔍 Slova: 112%</button>
+        <button class="btn btn-ghost btn-sm" id="soundToggleBtn" onclick="toggleSound()">🔊 Zvuk: ON</button>
+        <button class="btn btn-ghost btn-sm" onclick="openResetModal()">♻️ Reset</button>
+      </div>
+    </header>
+
+    <!-- POČETNI KREDNI EKRAN -->
+    <section id="screen-start" class="screen active">
+      <div class="chalk-card">
+        <h2 class="hero-title">Dobrodošli u Školica kviz!</h2>
+        <p class="hero-sub">
+          Kreni od prvog polja prema desetom kroz sedam bogatih područja: <strong>Regionalna kultura</strong>,
+          <strong>Filmovi i serije</strong>, <strong>Medicina</strong>, <strong>Opća povijest</strong>,
+          <strong>Svjetska glazba</strong>, <strong>Brza matematika</strong> i <strong>Otključaj rečenicu</strong>.
+          Pitanja se ne ponavljaju dok god u bazi ima neodigranih!
+        </p>
+
+        <div class="rules-grid">
+          <div class="rule-box">
+            <span class="rule-num">PRAVILO 1</span>
+            <h3>10 polja po partiji</h3>
+            <p>Svaka runda vodi kroz 10 izazova različitih kategorija i težina — od zagrijavanja do završnog skoka.</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-num">PRAVILO 2</span>
+            <h3>3 besplatne partije dnevno</h3>
+            <p>Dnevno imaš 3 besplatne runde. Kad ih potrošiš, novu partiju možeš otvoriti za <strong>5.000 bodova</strong>.</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-num">PRAVILO 3</span>
+            <h3>Tjedni vrh &amp; pehari</h3>
+            <p>Napreduj kroz rangove <strong>Bakar–Lako</strong>, <strong>Srebro–Teže</strong>, <strong>Zlato–Najteže</strong> i <strong>Platina–Mega</strong> te brani tjedni vrh od ponedjeljka do nedjelje.</p>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          <button class="btn btn-gold" onclick="showScreen('setup')">🚀 Postavi igru i kreni</button>
+          <button class="btn btn-sky" onclick="quickStart()">⚡ Brzi start</button>
+          <button class="btn btn-ghost" onclick="openPoolInfo()">📚 Stanje baze pitanja</button>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="chalk-card">
+          <h3 style="margin-top:0; color:var(--chalk-gold);">👑 Tjedni vrh (Pon–Ned)</h3>
+          <div id="weeklyChampBox"></div>
+        </div>
+        <div class="chalk-card">
+          <h3 style="margin-top:0; color:var(--chalk-mint);">🕒 Nedavne partije</h3>
+          <div id="recentHistoryBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EKRAN POSTAVKI (SOLO / TIM, GRB, TEŽINA) -->
+    <section id="screen-setup" class="screen">
+      <div class="paper-card">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+          <h2 style="margin:0;">Postavke partije</h2>
+          <button class="btn btn-ghost btn-sm" style="color:var(--panel-text); border-color:#94a3b8;" onclick="showScreen('start')">← Natrag</button>
+        </div>
+
+        <div class="setup-grid">
+          <div>
+            <span class="section-label">Način igre</span>
+            <div class="mode-switch">
+              <button type="button" class="choice-btn selected" id="modeSoloBtn" onclick="setMode('solo')">
+                🧍 Solo igrač
+              </button>
+              <button type="button" class="choice-btn" id="modeTeamBtn" onclick="setMode('team')">
+                👥 Timska igra
+              </button>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label class="section-label" for="playerNameInput" id="nameLabel">Ime igrača</label>
+              <input id="playerNameInput" class="input-text" type="text" maxlength="26" placeholder="Upiši ime ili naziv tima..." />
+            </div>
+
+            <div style="margin-top:12px;">
+              <span class="section-label">Šaljivi grb / maskota</span>
+              <div class="emblem-grid" id="emblemGrid"></div>
+            </div>
+          </div>
+
+          <div>
+            <span class="section-label">Rang pehara i težina</span>
+            <div class="tier-grid" id="tierGrid"></div>
+
+            <div style="margin-top:16px; padding:12px; border-radius:12px; background:#f8fafc; border:1px solid #cbd5e1;">
+              <div style="font-size:0.92rem; font-weight:700;" id="quotaStatusText"></div>
+              <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;">
+                <button class="btn btn-mint" id="startRoundBtn" onclick="startGame()">▶️ Započni partiju (10 polja)</button>
+                <button class="btn btn-gold" id="buyRoundBtn" onclick="buyExtraGame()" style="display:none;">
+                  🪙 Plati novu partiju (5.000 bod.)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EKRAN IGRE (10 POLJA) -->
+    <section id="screen-game" class="screen">
+      <div class="chalk-card">
+        <div class="track-header">
+          <div>
+            <strong id="activePlayerBadge">🧍 Igrač</strong> •
+            <span id="activeTierBadge" style="color:var(--chalk-gold); font-weight:700;">Bakar–Lako</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="pill">Polje: <strong id="fieldCounter">1 / 10</strong></span>
+            <span class="pill">Bodovi runde: <strong id="roundScore">0</strong></span>
+            <button class="btn btn-ghost btn-sm" onclick="quitToStart()">Prekini</button>
+          </div>
+        </div>
+
+        <div class="fields-track" id="fieldsTrack"></div>
+
+        <div class="paper-card" id="questionContainer"></div>
+      </div>
+    </section>
+
+    <!-- ZAVRŠNI EKRAN RUNDE -->
+    <section id="screen-summary" class="screen">
+      <div class="paper-card" id="summaryCard"></div>
+    </section>
+  </div>
+
+  <!-- MODAL ZA POTVRDU RESETA -->
+  <div class="modal-backdrop" id="resetModal">
+    <div class="modal-box">
+      <h3 style="margin-top:0;">Resetiranje podataka</h3>
+      <p style="color:var(--panel-muted); line-height:1.45;">
+        Želiš li očistiti samo popis već viđenih pitanja (da se ciklus pitanja ponovno zavrti) ili potpuno resetirati bodove, partije i povijest?
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; margin-top:16px;">
+        <button class="btn btn-ghost" style="color:var(--panel-text); border-color:#94a3b8;" onclick="closeResetModal()">Odustani</button>
+        <button class="btn btn-sky" onclick="resetSeenOnly()">Samo osvježi pitanja</button>
+        <button class="btn btn-coral" onclick="resetEverything()">Potpuni reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox"></div>
+
+  <script>
+    const STORAGE_KEY = "skolica_kviz_state_v4";
+    const DAILY_FREE_GAMES = 3;
+    const EXTRA_GAME_COST = 5000;
+    const FONT_SCALES = [1.12, 1.25, 1.38];
+
+    const EMBLEMS = [
+      { id: "kreda", ico: "🖍️", label: "Kreda" },
+      { id: "sova", ico: "🦉", label: "Sova" },
+      { id: "raketa", ico: "🚀", label: "Raketa" },
+      { id: "kava", ico: "☕", label: "Kava" },
+      { id: "gitara", ico: "🎸", label: "Gitara" },
+      { id: "lisica", ico: "🦊", label: "Lisica" },
+      { id: "kruna", ico: "👑", label: "Kruna" },
+      { id: "zeleni", ico: "🍀", label: "Djetelina" }
+    ];
+
+    const TIERS = [
+      { id: "bakar", name: "Bakar", diffLabel: "Lako", trophy: "🥉", mult: 1.0, desc: "Opušten start i klasična pitanja." },
+      { id: "srebro", name: "Srebro", diffLabel: "Teže", trophy: "🥈", mult: 1.25, desc: "Više detalja i brže računanje." },
+      { id: "zlato", name: "Zlato", diffLabel: "Najteže", trophy: "🥇", mult: 1.55, desc: "Za iskusne znalce svih kategorija." },
+      { id: "platina", name: "Platina", diffLabel: "Mega", trophy: "🏆", mult: 2.0, desc: "Maksimalni bodovi i najtvrđi izazovi." }
+    ];
+
+    // PROŠIRENA BAZA PITANJA PO KATEGORIJAMA
+    const RAW_QUESTIONS = {
+      "Regionalna kultura": [
+        { q: "Koji je tradicionalni istarski i primorski instrument s dvostrukom pisaljkom poznat po specifičnom zvuku?", opts: ["Sopela", "Tambura samica", "Gusle", "Lijerica"], ans: 0, dyk: "Sopela se u Istri i na Kvarneru često svira u paru — vela i mala sopela." },
+        { q: "Koja je dalmatinska tradicija višeglasnog pjevanja bez pratnje instrumenata upisana na UNESCO-vu baštinu?", opts: ["Klapa", "Ojkanje", "Ganga", "Bećarac"], ans: 0, dyk: "Klapsko pjevanje uvršteno je na UNESCO-ov Reprezentativni popis nematerijalne kulturne baštine čovječanstva." },
+        { q: "Što je tradicionalni slavonski i baranjski napjev često popraćen tamburicom i šaljivim dosjetkama?", opts: ["Bećarac", "Tarantela", "Fado", "Sevdalinka"], ans: 0, dyk: "Bećarci imaju prepoznatljiv deseterački ritam i često se smišljaju na licu mjesta." },
+        { q: "Koji je grad u Hrvatskom zagorju poznat po baroknom središtu i čuvenom Špancirfestu?", opts: ["Varaždin", "Šibenik", "Zadar", "Dubrovnik"], ans: 0, dyk: "Varaždin je dugo bio središte i sjedište bana prije nego što su institucije premještene u Zagreb." },
+        { q: "Što označava izraz 'marenda' u primorskom i dalmatinskom svakodnevnom govoru?", opts: ["Jutarnji ili prijepodnevni obrok", "Večernji izlazak", "Popodnevni san", "Morsku oluju"], ans: 0, dyk: "Marenda je nekad bila važan okrepljujući obrok za težake, ribare i radnike usred prijepodneva." },
+        { q: "Koji je poznati bosanskohercegovački i regionalni tradicionalni glazbeni žanr lirskog i čeznutljivog karaktera?", opts: ["Sevdalinka", "Polka", "Kolo", "Čardaš"], ans: 0, dyk: "Riječ sevdah potječe od arapske riječi za crnu žuč, a u tradiciji označava duboku čežnju ili ljubav." },
+        { q: "Koji je otočni specijalitet i tradicionalno jelo najpoznatije na otoku Pagu?", opts: ["Paški sir", "Burek sa sirom", "Kulenova seka", "Štrukli"], ans: 0, dyk: "Paški ovčji sir dozrijeva u specifičnim klimatskim uvjetima uz posolicu koju nosi bura." },
+        { q: "Što je 'licitar' u tradiciji sjeverozapadne Hrvatske?", opts: ["Ukrašeni kolač od medenog tijesta", "Drvena frula", "Vuneni prsluk", "Glazbeni ples"], ans: 0, dyk: "Licitarstvo sjeverne Hrvatske nalazi se na UNESCO-vu popisu nematerijalne kulturne baštine." },
+        { q: "Koji je festival u Dubrovniku od 1950. godine središnje ljetno okupljalište kazališta, glazbe i plesa?", opts: ["Dubrovačke ljetne igre", "Pulski filmski festival", "Splitsko ljeto", "Vinkovačke jeseni"], ans: 0, dyk: "Predstave se u Dubrovniku izvode na otvorenim gradskim trgovima, tvrđavama i palačama." },
+        { q: "Što je 'čardaš' u tradiciji Panonije i Vojvodine?", opts: ["Živahan narodni ples", "Vrsta riblje čorbe", "Drveni čamac", "Stari novac"], ans: 0, dyk: "Čardaš se najčešće izvodi u dvodobnoj mjeri i postupno ubrzava od laganog početka do brzog finala." },
+        { q: "Koji je tradicionalni istarski slatkiš od badema, prošeka i korice limuna i naranče?", opts: ["Pandefica", "Palačinke", "Krafne", "Baklava"], ans: 0, dyk: "Pandefice i kroštule česti su gosti svečanih trpeza diljem Istre i Kvarnera." },
+        { q: "Koji je tradicionalni hercegovački i dalmatinski način pripreme mesa i krumpira ispod željeznog ili glinenog zvona prekrivenog žarom?", opts: ["Ispod peke / čripnje", "Na pari", "U woku", "Na ražnju u pećnici"], ans: 0, dyk: "Zatvoreni prostor ispod peke zadržava vlagu i arome začinskog bilja." },
+        { q: "Koja manifestacija u Vinkovcima svake jeseni slavi slavonsku tradiciju, nošnje i folklor?", opts: ["Vinkovačke jeseni", "Riječki karneval", "Sinjska alka", "Motovun film festival"], ans: 0, dyk: "Vinkovačke jeseni održavaju se od sredine šezdesetih godina prošlog stoljeća." },
+        { q: "Što je 'sinjska alka'?", opts: ["Viteška igra gađanja kopljem u alku", "Tradicionalna regata", "Berba grožđa", "Košnja livade"], ans: 0, dyk: "Sinjska alka održava se u spomen na pobjedu nad osmanskom vojskom 1715. godine." },
+        { q: "Koji je stari zanat izrade drvenih igračaka u Hrvatskom zagorju na UNESCO-vu popisu?", opts: ["Tradicionalne drvene igračke Hrvatskog zagorja", "Izrada staklenih boca", "Kovanje mačeva", "Tkanje svile"], ans: 0, dyk: "Drvene konjiće, zviždaljke i tamburice izrađivali su majstori po selima oko Marije Bistrice." },
+        { q: "Što u dalmatinskom žargonu znači kad netko kaže da je 'fjaka'?", opts: ["Stanje blaženog opuštanja i usporenosti", "Jaki sjeverni vjetar", "Velika gužva na rivi", "Iznenadni pljusak"], ans: 0, dyk: "Fjaka je u dalmatinskoj kulturi gotovo uzvišeno stanje odmora, osobito nakon obilnog ručka." },
+        { q: "Koji je poznati istarski poluotok u obliku srca poznat po maslinicima, tartufima i malvaziji?", opts: ["Istra", "Pelješac", "Cres", "Krk"], ans: 0, dyk: "Motovunska šuma i dolina rijeke Mirne nadaleko su poznate po bijelom tartufu." },
+        { q: "Što su 'štrukli' u tradiciji Hrvatskog zagorja i Zagreba?", opts: ["Tijesto punjeno svježim sirom, kuhano ili pečeno", "Sušene smokve", "Ribani kupus", "Punjene paprike"], ans: 0, dyk: "Zagorski štrukli imaju oznaku zemljopisnog podrijetla i zaštićenu nematerijalnu vrijednost." },
+        { q: "Koji je tradicionalni gudački instrument karakterističan za južnu Dalmaciju i dubrovačko primorje?", opts: ["Lijerica", "Kontrabas", "Harfa", "Cimbal"], ans: 0, dyk: "Lijerica ima tri žice, a svirač gudalom dok nogom održava ritam." },
+        { q: "Što označava 'balun' u istarskoj narodnoj glazbi i plesu?", opts: ["Tradicionalni ples u parovima i glazbeni obrazac", "Vrsta čamca", "Zimska kapa", "Kameni zid"], ans: 0, dyk: "Balun je jedan od najprepoznatljivijih plesova istarskog folklora." },
+        { q: "Koji grad na sjevernom Jadranu je poznat po velikoj ljetnoj povorci Riječkog karnevala?", opts: ["Rijeka", "Pula", "Karlovac", "Osijek"], ans: 0, dyk: "Riječki karneval spaja tradiciju zvončara i maškaranih skupina iz cijele regije." },
+        { q: "Što su 'zvončari' u tradiciji Kastavštine i okolice?", opts: ["Maskirani ophodnici sa zvonima koji tjeraju zimu", "Ribari na drvenim barkama", "Gradski čuvari kula", "Svirači limene glazbe"], ans: 0, dyk: "Zvončari Kastavštine uvršteni su na UNESCO-vu listu nematerijalne baštine." },
+        { q: "Koji je slavonski suhomesnati specijalitet poznat po začinjenosti mljevenom crvenom paprikom?", opts: ["Kulen", "Pršut", "Pašticada", "Brudet"], ans: 0, dyk: "Slavonski kulen ima zaštićenu oznaku zemljopisnog podrijetla." },
+        { q: "Što je 'pašticada' u dalmatinskoj kuhinji?", opts: ["Sporo kuhana govedina u bogatom umaku uz njoke", "Riblja juha s rižom", "Slatki kolač od smokava", "Salata od hobotnice"], ans: 0, dyk: "Priprema prave pašticade često traje satima, uključujući mariniranje mesa." },
+        { q: "Koji je istarski grad poznat po rimskom amfiteatru (Areni)?", opts: ["Pula", "Rovinj", "Poreč", "Labin"], ans: 0, dyk: "Pulska Arena jedan je od šest najvećih sačuvanih rimskih amfiteatara na svijetu." },
+        { q: "Koja je poznata autohtona bijela sorta grožđa u Istri?", opts: ["Malvazija istarska", "Graševina", "Plavac mali", "Žlahtina"], ans: 0, dyk: "Malvazija istarska i teran među najpoznatijim su vinima istarskog poluotoka." },
+        { q: "Koji otok u Kvarneru je poznat po autohtonoj sorti vina žlahtini i Vrbniku?", opts: ["Krk", "Korčula", "Hvar", "Vis"], ans: 0, dyk: "Vrbnička žlahtina uspijeva u Vrbničkom polju na otoku Krku." },
+        { q: "Što je 'brudet' u primorskoj kuhinji?", opts: ["Tradicionalni riblji gulaš, često uz palentu", "Pečena janjetina", "Kolač od rogača", "Tjestenina s gljivama"], ans: 0, dyk: "Svako mjesto uz obalu ima svoju malu tajnu za dobar brudet, obično uz više vrsta ribe." },
+        { q: "Koji je najstariji sačuvani glagoljski spomenik na hrvatskom tlu pronađen na otoku Krku?", opts: ["Bašćanska ploča", "Ljetopis popa Dukljanina", "Vinodolski zakon", "Misal po zakonu rimskog dvora"], ans: 0, dyk: "Bašćanska ploča potječe oko 1100. godine i pronađena je u crkvi sv. Lucije u Jurandvoru." },
+        { q: "Koji je grad na rijeci Dravi najveći grad u Slavoniji?", opts: ["Osijek", "Požega", "Brod", "Virovitica"], ans: 0, dyk: "Osijek je poznat po Tvrđi, šetnici uz Dravu i bogatoj secesijskoj arhitekturi." }
+      ],
+
+      "Filmovi i serije": [
+        { q: "Koji je kultni hrvatski film Kreše Golika iz 1970. godine poznat po nezaboravnoj glazbi i humoru?", opts: ["Tko pjeva zlo ne misli", "Breza", "Maratonci trče počasni krug", "Valter brani Sarajevo"], ans: 0, dyk: "Film je snimljen prema priči Vjekoslava Majera i prati zagrebačku obitelj Šafranek." },
+        { q: "U kojoj se hrvatskoj seriji pojavljuju legendarni likovi Roko Prč, Strikan i Netjak?", opts: ["Velo misto", "Gruntovčani", "Prosjaci i sinovi", "Smogovci"], ans: 0, dyk: "Serija Velo misto prati život u dalmatinskom lučkom gradu kroz desetljeća." },
+        { q: "Koja je legendarna serija smještena u fiktivno selo Gruntovec uz likove Dudeka i Regice?", opts: ["Gruntovčani", "Naše malo misto", "Crno-bijeli svijet", "Odmori se, zaslužio si"], ans: 0, dyk: "Gruntovčani su snimljeni u kajkavskom dijalektu i osvojili publiku diljem regije." },
+        { q: "U kojem su filmu iz 1982. godine slavne rečenice poput 'Laku noć, svirači' i 'Topalovići'?", opts: ["Maratonci trče počasni krug", "Ko to tamo peva", "Balkanski špijun", "Sabirni centar"], ans: 0, dyk: "Film je režirao Slobodan Šijan prema tekstu Dušana Kovačevića." },
+        { q: "Koji film Slobodana Šijana prati vožnju starim autobusom 'Krstić' prema Beogradu u travnju 1941.?", opts: ["Ko to tamo peva", "Davitelj protiv davitelja", "Kako je propao rokenrol", "Mi nismo anđeli"], ans: 0, dyk: "Putnici u autobusu predstavljaju široku lepezu tipičnih likova toga vremena." },
+        { q: "Koja je kultna zagrebačka serija pratila braću Vragec i njihove zgode u naselju Nasred Svijeta?", opts: ["Smogovci", "Zakon!", "Bitange i princeze", "Luda kuća"], ans: 0, dyk: "Smogovci su nastali prema romanima Hrvoja Hitreca i obilježili odrastanje mnogih generacija." },
+        { q: "Tko je tumačio naslovnu ulogu u filmu 'Balkanski špijun' (Ilija Čvorović)?", opts: ["Danilo Bata Stojković", "Pavle Vuisić", "Fabijan Šovagović", "Rade Šerbedžija"], ans: 0, dyk: "Balkanski špijun spoj je crne komedije, paranoje i obiteljske drame." },
+        { q: "Koji je film Ante Babaje iz 1967. godine smatran jednim od vrhunaca hrvatskog poetskog filma?", opts: ["Breza", "Rondo", "H-8...", "Lisice"], ans: 0, dyk: "Radnja Breze smještena je u međimursko selo i prati sudbinu mlade djevojke Janice." },
+        { q: "Koji je jugoslavenski film iz 1958. godine snimljen prema istinitom događaju autobusne nesreće?", opts: ["H-8...", "Kozara", "Bitka na Neretvi", "Sutjeska"], ans: 0, dyk: "Film prati sudbine putnika iz različitih vlakova i automobila u satima prije sudara." },
+        { q: "Koja je serija pratila život Kikaša, Matana i obitelji iz Dalmatinske zagore prema romanu Ivana Raosa?", opts: ["Prosjaci i sinovi", "Kuda idu divlje svinje", "Kapelski kresovi", "Nepokoreni grad"], ans: 0, dyk: "Lik Kikaša postao je jedan od najpoznatijih televizijskih negativaca na ovim prostorima." },
+        { q: "U kojem svjetskom filmu redatelj Christopher Nolan prati junaka koji ulazi u snove da bi usadio ideju?", opts: ["Inception (Početak)", "Interstellar", "Dunkirk", "Memento"], ans: 0, dyk: "Film koristi više razina snova i specifičan vremenski ritam u svakoj razini." },
+        { q: "Koji je animirani film studija Pixar priča o igračkama koje ožive kad ljudi nisu u sobi?", opts: ["Toy Story (Priča o igračkama)", "Cars", "Coco", "Ratatouille"], ans: 0, dyk: "Priča o igračkama iz 1995. prvi je dugometražni film u potpunosti animiran računalom." },
+        { q: "Koja je kultna znanstveno-fantastična serija započeta 1966. godine s brodom USS Enterprise?", opts: ["Star Trek (Zvjezdane staze)", "Babylon 5", "Firefly", "The Expanse"], ans: 0, dyk: "Zvjezdane staze su popularizirale ideju raznolike posade i znanstvene radoznalosti." },
+        { q: "Tko je režirao kultni film 'Pulp Fiction' (Pakleni šund) iz 1994. godine?", opts: ["Quentin Tarantino", "Martin Scorsese", "David Fincher", "Ridley Scott"], ans: 0, dyk: "Film je poznat po nelinearnom pričanju priče i prepoznatljivim dijalozima." },
+        { q: "Koja serija prati obitelj Bluth i njihove poslovne nevolje u Kaliforniji?", opts: ["Arrested Development", "The Office", "Parks and Recreation", "Seinfeld"], ans: 0, dyk: "Poznata je po vizualnim gegovima, ponavljajućim šalama i brzim montažnim rezovima." },
+        { q: "Koji je novozelandski redatelj režirao filmsku trilogiju 'Gospodar prstenova'?", opts: ["Peter Jackson", "James Cameron", "Guillermo del Toro", "Denis Villeneuve"], ans: 0, dyk: "Cijela trilogija snimana je paralelno na lokacijama diljem Novog Zelanda." },
+        { q: "U kojem filmu Tom Hanks glumi čovjeka nasukanog na pustom otoku čiji je jedini suputnik odbojkaška lopta Wilson?", opts: ["Cast Away (Brodolom života)", "Forrest Gump", "Catch Me If You Can", "The Terminal"], ans: 0, dyk: "Odbojkaška lopta dobila je ime po proizvođaču sportske opreme." },
+        { q: "Koja je britanska serija u šest sezona pratila obitelj Shelby iz Birminghama nakon Prvog svjetskog rata?", opts: ["Peaky Blinders", "Sherlock", "Downton Abbey", "Luther"], ans: 0, dyk: "Radnja se vrti oko ulične bande i obiteljskog uspona u industrijskom okruženju." },
+        { q: "Koji je film Hayaoa Miyazakija osvojio Oscara za najbolji animirani film 2003. godine?", opts: ["Spirited Away (Avanture male Chihiro)", "My Neighbor Totoro", "Princess Mononoke", "Howl's Moving Castle"], ans: 0, dyk: "Film prati djevojčicu Chihiro u čarobnom svijetu duhova i božanstava." },
+        { q: "Koja je humoristična serija smještena u ured papirnice u Scrantonu?", opts: ["The Office", "Friends", "How I Met Your Mother", "Brooklyn Nine-Nine"], ans: 0, dyk: "Američka verzija serije snimljena je u mockumentary stilu s kamerom iz ruke." },
+        { q: "Koji je poznati film Stevena Spielberga o parku u kojem oživljavaju prapovijesni dinosauri?", opts: ["Jurassic Park (Jurski park)", "E.T.", "Indiana Jones", "Jaws"], ans: 0, dyk: "Jurski park iz 1993. pomaknuo je granice vizualnih efekata i animatronike." },
+        { q: "U kojem kultnom filmu šest prijatelja živi u New Yorku i često se okuplja u kafiću Central Perk?", opts: ["Friends (Prijatelji)", "Cheers", "Frasier", "New Girl"], ans: 0, dyk: "Serija Prijatelji emitirana je punih deset sezona od 1994. do 2004. godine." },
+        { q: "Koji je redatelj snimio filmske klasike 'Psi iz rezervata' i 'Bilo jednom u Hollywoodu'?", opts: ["Quentin Tarantino", "Stanley Kubrick", "Alfred Hitchcock", "Wes Anderson"], ans: 0, dyk: "Tarantino je poznat po pažljivo odabranoj filmskoj glazbi i živopisnim likovima." },
+        { q: "Koji je hrvatski film redatelja Vinka Brešana iz 1996. godine komedija o osebujnom župniku i kontracepciji?", opts: ["Kako je počeo rat na mom otoku", "Maršal", "Svjedoci", "Fine mrtve djevojke"], ans: 0, dyk: "Film je postao jedan od najgledanijih hrvatskih filmova devedesetih godina." },
+        { q: "Koji je znanstveno-fantastični film iz 1999. godine poznat po motivu crvene i plave pilule te 'bullet time' efektima?", opts: ["The Matrix (Matrica)", "Blade Runner", "Arrival", "Dune"], ans: 0, dyk: "Film su režirale sestre Wachowski, a glavne uloge tumače Keanu Reeves, Carrie-Anne Moss i Laurence Fishburne." }
+      ],
+
+      "Medicina": [
+        { q: "Koji organ u ljudskom tijelu proizvodi inzulin potreban za regulaciju razine šećera u krvi?", opts: ["Gušterača", "Jetra", "Slezena", "Žučni mjehur"], ans: 0, dyk: "Inzulin luče beta-stanice u Langerhansovim otočićima gušterače." },
+        { q: "Koja krvna stanica prenosi kisik od pluća do tkiva u tijelu?", opts: ["Eritrocit (crvena krvna stanica)", "Leukocit", "Trombocit", "Limfocit"], ans: 0, dyk: "Crvenu boju eritrocitima daje bjelančevina hemoglobin koja veže kisik." },
+        { q: "Koliko normalno ljudsko srce ima srčanih šupljina?", opts: ["Četiri (dvije pretklijetke i dvije klijetke)", "Dvije", "Tri", "Šest"], ans: 0, dyk: "Desna strana srca šalje krv u pluća, a lijeva pumpa oksigeniranu krv u ostatak tijela." },
+        { q: "Koji vitamin ljudska koža prirodno stvara pod utjecajem sunčeve UVB svjetlosti?", opts: ["Vitamin D", "Vitamin C", "Vitamin B12", "Vitamin K"], ans: 0, dyk: "Vitamin D važan je za apsorpciju kalcija i zdravlje kostiju." },
+        { q: "Što mjeri tlakomjer (sfingmomanometar)?", opts: ["Krvni tlak", "Razinu kisika u krvi", "Tjelesnu temperaturu", "Oštrinu vida"], ans: 0, dyk: "Vrijednosti se izražavaju u milimetrima živa stupca (mmHg) kao sistolički i dijastolički tlak." },
+        { q: "Koja je najduža i najjača kost u ljudskom tijelu?", opts: ["Bedrena kost (femur)", "Goljenična kost", "Nadlaktična kost", "Ključna kost"], ans: 0, dyk: "Bedrena kost povezuje zdjelicu i koljeno te podnosi velika opterećenja pri hodu i trčanju." },
+        { q: "Što su trombociti (krvne pločice)?", opts: ["Stanice/fragmenti važni za zgrušavanje krvi", "Stanice koje proizvode antitijela", "Živčana vlakna", "Hormoni štitnjače"], ans: 0, dyk: "Pomažu zaustaviti krvarenje stvaranjem ugruška na mjestu ozljede krvne žile." },
+        { q: "Koji dio oka služi kao prirodna leća koja prilagođava fokus na bliske i daleke predmete?", opts: ["Očna leća", "Rožnica", "Zjenica", "Vidni živac"], ans: 0, dyk: "Promjenom zakrivljenosti leće oko se akomodira na različite udaljenosti." },
+        { q: "Koji se plin u većini izdiše iz pluća u odnosu na udahnuti zrak?", opts: ["Ugljikov dioksid (CO2)", "Dušik", "Helij", "Argon"], ans: 0, dyk: "Ugljikov dioksid nastaje kao nusprodukt staničnog disanja i izbacuje se izdisajem." },
+        { q: "Koji organ je najveća unutarnja žlijezda u ljudskom tijelu i sudjeluje u metabolizmu, detoksikaciji i stvaranju žuči?", opts: ["Jetra", "Štitnjača", "Hipofiza", "Nadbubrežna žlijezda"], ans: 0, dyk: "Jetra obavlja stotine različitih biokemijskih reakcija svake minute." },
+        { q: "Što znači kratica EKG (elektrokardiogram)?", opts: ["Zapis električne aktivnosti srca", "Snimanje kostiju rendgenom", "Analiza krvnih grupa", "Mjerenje kapaciteta pluća"], ans: 0, dyk: "EKG pomaže liječnicima procijeniti srčani ritam i provođenje impulsa kroz srčani mišić." },
+        { q: "Koji sustav organa štiti tijelo od patogena poput bakterija i virusa?", opts: ["Imunosni sustav", "Probavni sustav", "Lokomotorni sustav", "Endokrini sustav"], ans: 0, dyk: "Imunosni sustav uključuje bijele krvne stanice, antitijela, limfne čvorove i slezenu." },
+        { q: "Gdje se nalazi pužnica (kohlea) važna za sluh?", opts: ["U unutarnjem uhu", "U nosnoj šupljini", "U grkljanu", "U zatiljnom režnju"], ans: 0, dyk: "Pužnica pretvara mehaničke zvučne vibracije u električne signale za slušni živac." },
+        { q: "Koji mineral je glavni gradivni element kostiju i zuba?", opts: ["Kalcij", "Natrij", "Kalij", "Jod"], ans: 0, dyk: "Oko 99% kalcija u tijelu nalazi se u kostima i zubima." },
+        { q: "Što je dehidracija u medicinskom smislu?", opts: ["Nedostatak vode i elektrolita u organizmu", "Povišena razina željeza", "Upala srednjeg uha", "Ukočenost zglobova"], ans: 0, dyk: "Čak i blaga dehidracija može izazvati umor, glavobolju i pad koncentracije." },
+        { q: "Koja žlijezda na prednjem dijelu vrata proizvodi hormone koji ubrzavaju ili usporavaju metabolizam?", opts: ["Štitnjača", "Timus", "Epifiza", "Sluzna žlijezda"], ans: 0, dyk: "Za sintezu hormona štitnjače nužan je jod iz prehrane." },
+        { q: "Što je puls (bilo)?", opts: ["Ritmično širenje arterija uslijed rada srca", "Razina šećera u krvi", "Količina zraka u plućima", "Krvni tlak u mirovanju"], ans: 0, dyk: "Puls se najlakše napipa na zapešću (radijalna arterija) ili na vratu (karotidna arterija)." },
+        { q: "Koji živac prenosi vizualne informacije od mrežnice oka do mozga?", opts: ["Vidni (optički) živac", "Vagus", "Troklarni živac", "Facijalni živac"], ans: 0, dyk: "Mjesto gdje vidni živac izlazi iz mrežnice nema fotoreceptora i naziva se slijepa pjega." },
+        { q: "Koja je uloga bubrega u ljudskom tijelu?", opts: ["Filtriranje krvi i izlučivanje otpadnih tvari mokraćom", "Pumpanje krvi u aortu", "Stvaranje crvenih krvnih zrnaca u želucu", "Lučenje želučane kiseline"], ans: 0, dyk: "Bubrezi također pomažu u regulaciji krvnog tlaka i ravnoteže tekućina." },
+        { q: "Što označava normalna tjelesna temperatura čovjeka u mirovanju oko 36,5–37 °C?", opts: ["Oko 37 °C", "Oko 34 °C", "Oko 39,5 °C", "Oko 41 °C"], ans: 0, dyk: "Temperatura se blago mijenja tijekom dana i može se razlikovati ovisno o mjestu mjerenja." },
+        { q: "Koji uređaj u hitnoj medicini isporučuje električni šok radi uspostavljanja normalnog srčanog ritma?", opts: ["Defibrilator", "Otoskop", "Stetoskop", "Spirometar"], ans: 0, dyk: "Automatski vanjski defibrilatori (AVD) nalaze se na mnogim javnim mjestima." },
+        { q: "Koji vitamin se u velikoj mjeri nalazi u agrumima i paprici te podržava normalnu funkciju imunosnog sustava?", opts: ["Vitamin C", "Vitamin K", "Vitamin E", "Vitamin B1"], ans: 0, dyk: "Vitamin C je topiv u vodi i važan je i za sintezu kolagena." },
+        { q: "Kojim instrumentom liječnik najčešće oslušava rad srca i disanje u plućima?", opts: ["Stetoskopom", "Refleksnim čekićem", "Tlakomjerom", "Mikrotomom"], ans: 0, dyk: "Stetoskop je izumljen početkom 19. stoljeća u Francuskoj." },
+        { q: "Što mjeri pulsni oksimetar na vrhu prsta?", opts: ["Zasićenost krvi kisikom (SpO2) i puls", "Krvni šećer", "Krvnu grupu", "Gustoću kostiju"], ans: 0, dyk: "Normalna vrijednost zasićenosti kisikom kod zdravih osoba u mirovanju obično je 95–100%." },
+        { q: "Koja krvna grupa se tradicionalno naziva univerzalnim darivateljem crvenih krvnih stanica u hitnim situacijama?", opts: ["0 negativna (0-)", "AB pozitivna (AB+)", "A pozitivna (A+)", "B negativna (B-)"], ans: 0, dyk: "U transfuzijskoj medicini uvijek se provodi stroga provjera kompatibilnosti." }
+      ],
+
+      "Opća povijest": [
+        { q: "U kojem je stoljeću Johannes Gutenberg u Europi usavršio tiskarski stroj s pomičnim metalnim slovima?", opts: ["U 15. stoljeću", "U 11. stoljeću", "U 18. stoljeću", "U 8. stoljeću"], ans: 0, dyk: "Gutenbergova Biblija tiskana je sredinom 15. stoljeća u Mainzu." },
+        { q: "Koji je antički grad bio poznat po Koloseumu i Rimskom forumu?", opts: ["Rim", "Atena", "Sparta", "Kartaga"], ans: 0, dyk: "Koloseum je dovršen 80. godine nove ere i mogao je primiti desetke tisuća gledatelja." },
+        { q: "Kojom je plovidbom ekspedicija Ferdinanda Magellana (nastavljena pod vodstvom Juana Sebastiána Elcana) započela prvo oplovljavanje Zemlje?", opts: ["1519. godine", "1492. godine", "1620. godine", "1776. godine"], ans: 0, dyk: "Putovanje je trajalo oko tri godine i dokazalo povezanost svjetskih oceana." },
+        { q: "Koji je drevni sustav pisma u starom Egiptu koristio slikovne i fonetske znakove?", opts: ["Hijeroglifi", "Klinasto pismo", "Runsko pismo", "Glagoljica"], ans: 0, dyk: "Hijeroglifi su dešifrirani uz pomoć Kamena iz Rosette početkom 19. stoljeća." },
+        { q: "Koje je slavensko pismo sastavio Konstantin (Ćiril) u 9. stoljeću za potrebe Moravske misije?", opts: ["Glagoljica", "Ćirilica", "Latinica", "Bosančica"], ans: 0, dyk: "Glagoljica je najstarije slavensko pismo i dugo se koristila u hrvatskoj pismenosti i liturgiji." },
+        { q: "U kojoj je godini prvi čovjek kročio na Mjesec u misiji Apollo 11?", opts: ["1969.", "1957.", "1961.", "1975."], ans: 0, dyk: "Neil Armstrong i Buzz Aldrin sletjeli su u područje Mora tišine u srpnju 1969." },
+        { q: "Koja je civilizacija u Mezoamerici izgradila gradove poput Tikala i Chichén Itze?", opts: ["Maje", "Kelti", "Feničani", "Etruščani"], ans: 0, dyk: "Maje su razvile naprednu astronomiju, kalendar i složeno pismo." },
+        { q: "Koji je zid podijelio Berlin od 1961. do 1989. godine?", opts: ["Berlinski zid", "Hadrijanov zid", "Kineski zid", "Antoninov zid"], ans: 0, dyk: "Pad Berlinskog zida u studenome 1989. označio je simboličan kraj hladnoratovske podjele Europe." },
+        { q: "Tko je bio prvi predsjednik SAD-a?", opts: ["George Washington", "Abraham Lincoln", "Thomas Jefferson", "Theodore Roosevelt"], ans: 0, dyk: "George Washington obnašao je predsjedničku dužnost od 1789. do 1797. godine." },
+        { q: "Kojim je drevnim trgovačkim putem povezivan istok Azije i Sredozemlje?", opts: ["Put svile", "Jantarni put", "Sjeverozapadni prolaz", "Začinski kanal"], ans: 0, dyk: "Kroz stoljeća su tim mrežama putovali svila, začini, papir, ali i ideje i znanja." },
+        { q: "U kojem je gradu 1789. godine započela Francuska revolucija padom Bastille?", opts: ["U Parizu", "U Lyonu", "U Marseilleu", "U Versaillesu"], ans: 0, dyk: "14. srpnja obilježava se u Francuskoj kao nacionalni praznik." },
+        { q: "Koja je drevna grčka država bila poznata po razvoju demokracije i filozofije u 5. stoljeću pr. Kr.?", opts: ["Atena", "Teba", "Korint", "Makedonija"], ans: 0, dyk: "U klasičnoj Ateni djelovali su mislioci poput Sokrata, Platona i Aristotela." },
+        { q: "Koji je izum u 18. stoljeću snažno potaknuo Industrijsku revoluciju u prometu i tvornicama?", opts: ["Parni stroj", "Kompas", "Telegraf", "Fotografija"], ans: 0, dyk: "James Watt znatno je unaprijedio učinkovitost parnog stroja." },
+        { q: "Koji je pomorac 1492. godine predvodio ekspediciju koja je stigla do karipskih otoka?", opts: ["Kristofor Kolumbo", "Vasco da Gama", "James Cook", "Bartolomeu Dias"], ans: 0, dyk: "Brodovi ekspedicije zvali su se Santa María, Niña i Pinta." },
+        { q: "Koje je drevno carstvo u Andama razvilo sustav cesta i vezanih čvorova 'kipu' za evidenciju?", opts: ["Carstvo Inka", "Asteci", "Babilonci", "Hetiti"], ans: 0, dyk: "Carstvo Inka imalo je središte u Cuscu u današnjem Peruu." },
+        { q: "U kojem je desetljeću potonuo putnički brod RMS Titanic na svom prvom putovanju 1912. godine?", opts: ["U 1910-ima (1912.)", "U 1880-ima", "U 1930-ima", "U 1950-ima"], ans: 0, dyk: "Titanic je potonuo u sjevernom Atlantiku nakon udara u santu leda." },
+        { q: "Koja je žena dvaput osvojila Nobelovu nagradu u dva različita znanstvena područja (fizika i kemija)?", opts: ["Marie Curie", "Rosalind Franklin", "Ada Lovelace", "Grace Hopper"], ans: 0, dyk: "Marie Curie proučavala je radioaktivnost i otkrila polonij i radij." },
+        { q: "Koji je rimski vojskovođa i državnik izgovorio 'Alea iacta est' (Kocka je bačena) pri prelasku Rubikona?", opts: ["Julije Cezar", "August", "Trajan", "Hadrijan"], ans: 0, dyk: "Prelazak rijeke Rubikon 49. godine pr. Kr. označio je početak građanskog rata." },
+        { q: "Što je bila Magna Carta iz 1215. godine u Engleskoj?", opts: ["Povelja kojom su ograničene kraljevske ovlasti", "Pomorska karta svijeta", "Prvi tiskani rječnik", "Mirovni ugovor u Aziji"], ans: 0, dyk: "Magna Carta postala je važan simbol ograničavanja samovolje vlasti." },
+        { q: "Koje je drevno pismo u Mezopotamiji utiskivano u glinene pločice?", opts: ["Klinasto pismo", "Hijeratičko pismo", "Ogam", "Hangul"], ans: 0, dyk: "Klinasto pismo koristili su Sumerani, Babilonci i Asirci." },
+        { q: "Koji je antički grad poznat po glasovitom svjetioniku i velikoj knjižnici u Egiptu?", opts: ["Aleksandrija", "Efes", "Babilon", "Perzepolis"], ans: 0, dyk: "Aleksandriju je osnovao Aleksandar Veliki 331. godine pr. Kr." },
+        { q: "Koja je europska dinastija stoljećima vladala Austrijom i Habsburškom Monarhijom?", opts: ["Habsburgovci", "Tudori", "Romanovi", "Bourboni"], ans: 0, dyk: "Habsburški vladari imali su velik utjecaj u srednjoj Europi sve do 1918. godine." },
+        { q: "U kojem je stoljeću započela gradnja Kineskog zida u svom ranom obliku?", opts: ["U prvim stoljećima pr. Kr.", "U 14. stoljeću", "U 10. stoljeću", "U 17. stoljeću"], ans: 0, dyk: "Kineski zid sastoji se od niza zidina i utvrda građenih i obnavljanih kroz duga razdoblja." },
+        { q: "Koji je poljski astronom u 16. stoljeću formulirao heliocentrični model svemira?", opts: ["Nikola Kopernik", "Johannes Kepler", "Tycho Brahe", "Edmond Halley"], ans: 0, dyk: "Kopernikovo djelo 'De revolutionibus orbium coelestium' objavljeno je 1543. godine." },
+        { q: "Koja je organizacija osnovana 1945. godine nakon Drugog svjetskog rata radi očuvanja mira i međunarodne suradnje?", opts: ["Ujedinjeni narodi (UN)", "Liga naroda", "Svjetska zdravstvena unija", "Međunarodni olimpijski odbor"], ans: 0, dyk: "Povelja Ujedinjenih naroda potpisana je u San Franciscu u lipnju 1945." }
+      ],
+
+      "Svjetska glazba": [
+        { q: "Iz koje je zemlje potekao glazbeni stil reggae koji je proslavio Bob Marley?", opts: ["Jamajka", "Kuba", "Trinidad i Tobago", "Barbados"], ans: 0, dyk: "Reggae se razvio krajem 1960-ih na Jamajci iz ska i rocksteady ritmova." },
+        { q: "Koji je poznati britanski rock sastav iz Liverpoola činila četvorka Lennon, McCartney, Harrison i Starr?", opts: ["The Beatles", "Pink Floyd", "Queen", "Depeche Mode"], ans: 0, dyk: "The Beatles su obilježili glazbu šezdesetih godina prošlog stoljeća albumima poput Sgt. Pepper i Abbey Road." },
+        { q: "Koji je glazbeni stil i ples nastao u lučkim četvrtima Buenos Airesa i Montevidea?", opts: ["Tango", "Samba", "Flamenco", "Bossa nova"], ans: 0, dyk: "Tango spaja europske, afričke i lokalne glazbene utjecaje uz prepoznatljiv bandoneon." },
+        { q: "Koja je tradicionalna španjolska umjetnost koja spaja pjevanje, gitaru i ritmični ples, osobito u Andaluziji?", opts: ["Flamenco", "Poloneza", "Mazurka", "Jodel"], ans: 0, dyk: "Flamenco se nalazi na UNESCO-vu popisu nematerijalne kulturne baštine." },
+        { q: "Koliko tipki ima standardni klavir s punim rasponom?", opts: ["88 tipki", "61 tipku", "76 tipki", "100 tipki"], ans: 0, dyk: "Standardni klavir ima 52 bijele i 36 crnih tipki u skupinama po dvije i tri." },
+        { q: "Koji je brazilski glazbeni stil i ples povezan s karnevalom u Rio de Janeiru?", opts: ["Samba", "Cumbia", "Merengue", "Salsa"], ans: 0, dyk: "Samba ima snažne afrobrazilske korijene i bogatu perkusionističku sekciju." },
+        { q: "Tko je skladao čuveni ciklus violnskih koncerata 'Četiri godišnja doba'?", opts: ["Antonio Vivaldi", "Johann Sebastian Bach", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"], ans: 0, dyk: "Svaki od četiri koncerta prati popratni sonet koji opisuje prizore proljeća, ljeta, jeseni i zime." },
+        { q: "Koji puhački instrument ima dvostruki jezičak i karakterističan topao zvuk u orkestru?", opts: ["Oboa", "Flauta", "Truba", "Tuba"], ans: 0, dyk: "Simfonijski orkestar često ugađa instrumente upravo prema tonu oboe." },
+        { q: "Koja je islandska glazbenica poznata po eksperimentalnom spoju elektronike, popa i vokalne izražajnosti?", opts: ["Björk", "Adele", "Dua Lipa", "Sia"], ans: 0, dyk: "Björk je međunarodnu karijeru započela još u sastavu The Sugarcubes." },
+        { q: "Što označava talijanska glazbena oznaka 'forte' (f)?", opts: ["Glasno", "Vrlo tiho", "Vrlo brzo", "Postupno usporavajući"], ans: 0, dyk: "Suprotno od forte je piano (p), što znači tiho." },
+        { q: "Koji je instrument poznat po tome što nema tipke ni žice, a zvuk nastaje pomicanjem ruku u elektromagnetskom polju oko dviju antena?", opts: ["Teremin", "Harpsikord", "Ksilofon", "Akordeon"], ans: 0, dyk: "Teremin je izumio ruski fizičar Léon Theremin početkom 20. stoljeća." },
+        { q: "Koja je švedska pop grupa osvojila Euroviziju 1974. pjesmom 'Waterloo'?", opts: ["ABBA", "Roxette", "Europe", "Ace of Base"], ans: 0, dyk: "ABBA je postala jedna od najuspješnijih pop skupina svih vremena." },
+        { q: "Koji je žičani instrument sa šest žica temelj mnogih stilova od klasike i jazza do rocka i fada?", opts: ["Gitara", "Mandolina", "Viola", "Ukulele"], ans: 0, dyk: "Akustična, klasična i električna gitara imaju svaka svoje specifičnosti zvuka i tehnike." },
+        { q: "Koja je portugalska glazbena forma puna sjete i čežnje ('saudade') najčešće uz akustičnu i portugalsku gitaru?", opts: ["Fado", "Rebetiko", "Klezmerska glazba", "Bluegrass"], ans: 0, dyk: "Fado je osobito vezan uz četvrti Alfama i Mouraria u Lisabonu." },
+        { q: "Koliko žica ima standardna violina?", opts: ["Četiri žice", "Šest žica", "Pet žica", "Osam žica"], ans: 0, dyk: "Žice violine ugađaju se u čistim kvintama: G, D, A i E." },
+        { q: "Koji je glazbeni žanr nastao krajem 19. i početkom 20. stoljeća na jugu SAD-a, s naglaskom na sinkopu i improvizaciju?", opts: ["Jazz", "Synthwave", "Dubstep", "Polka"], ans: 0, dyk: "New Orleans se često navodi kao jedno od ključnih ishodišta ranog jazza." },
+        { q: "Tko je skladao 'Malu noćnu muziku' (Eine kleine Nachtmusik)?", opts: ["Wolfgang Amadeus Mozart", "Frédéric Chopin", "Pyotr Ilyich Tchaikovsky", "Claude Debussy"], ans: 0, dyk: "Djelo je napisano 1787. godine za gudače i jedno je od najpoznatijih djela klasične glazbe." },
+        { q: "Koji je udaraljkaški instrument s drvenim pločicama koje se udaraju batićima?", opts: ["Ksilofon / Marimba", "Timpan", "Triangl", "Činele"], ans: 0, dyk: "Marimba obično ima dublji i rezonantniji zvuk od ksilofona." },
+        { q: "Koja je američka kantautorica i pijanistica izdala kultni album 'Blue' 1971. godine?", opts: ["Joni Mitchell", "Carole King", "Janis Joplin", "Patti Smith"], ans: 0, dyk: "Album Blue često se uvrštava među najutjecajnije kantautorske albume." },
+        { q: "Što u glazbenoj teoriji znači 'tempo'?", opts: ["Brzinu izvođenja skladbe", "Visinu tona", "Broj izvođača", "Vrsta papira za note"], ans: 0, dyk: "Tempo se može označiti talijanskim izrazima (npr. allegro, adagio) ili u BPM-ima." },
+        { q: "Koji je poznati britanski rock sastav izdao kultni album 'The Dark Side of the Moon' 1973. godine?", opts: ["Pink Floyd", "Led Zeppelin", "The Rolling Stones", "The Who"], ans: 0, dyk: "The Dark Side of the Moon jedan je od najprodavanijih albuma svih vremena." },
+        { q: "Koji je mali trzalački instrument podrijetlom s Havaja često sa četiri žice?", opts: ["Ukulele", "Kontrabas", "Saksofon", "Fagot"], ans: 0, dyk: "Ukulele se razvio u 19. stoljeću na Havajima po uzoru na male žičane instrumente doseljenika s Madeire." },
+        { q: "Tko je skladao čuvenu 'Odu radosti' u svojoj Devetoj simfoniji?", opts: ["Ludwig van Beethoven", "Franz Schubert", "Johannes Brahms", "Richard Wagner"], ans: 0, dyk: "Oda radosti kasnije je postala i službena himna Europske unije." },
+        { q: "Koji je limeni puhački instrument poznat po pomičnoj cijevi ('šiberu') kojom se mijenja visina tona?", opts: ["Trombon", "Klarinet", "Harfa", "Čelo"], ans: 0, dyk: "Trombon se podjednako koristi u simfonijskom orkestru, jazzu i puhačkim sastavima." },
+        { q: "Iz koje je zemlje potekao glazbeni i plesni stil bossa nova pedesetih godina 20. stoljeća?", opts: ["Brazil", "Argentina", "Kolumbija", "Meksiko"], ans: 0, dyk: "Bossa nova spaja ritmove sambe s blažim, jazzovskim harmonijama." }
+      ]
+    };
+
+    // PROŠIRENE REČENICE ZA KATEGORIJU "OTKLJUČAJ REČENICU"
+    const SENTENCE_POOL = [
+      "DOBRO JUTRO I SRETAN PUT",
+      "TKO RANO RANI DVIJE SREĆE GRABI",
+      "U ZDRAVOM TIJELU ZDRAV DUH",
+      "KNJIGA JE NAJBOLJI ČOVJEKOV PRIJATELJ",
+      "STRPLJENJE JE KLJUČ DO USPJEHA",
+      "SVAKA ŠKOLA JE NOVA PRILIKA",
+      "DOBAR GLAS DALEKO SE ČUJE",
+      "TKO PITA NE SKITA",
+      "NAKON KIŠE UVIJEK DOĐE SUNCE",
+      "UČIMO DOK SMO ŽIVI",
+      "TIMSKI RAD POKREĆE PLANINE",
+      "GLAZBA SPAJA RAZLIČITE SVJETOVE",
+      "MUDROST DOLAZI S ISKUSTVOM",
+      "SVAKI DAN JE NOVA STRANICA",
+      "PAMETAN ČOVJEK SE UČI NA TUĐIM GREŠKAMA",
+      "KRATKA ŠETNJA BISTRI MISLI",
+      "OSMJEH OTKRIJE MNOGA VRATA",
+      "DOMAĆA JELA UVIJEK MIRIŠU NAJJAČE",
+      "DOBRA IDEJA VRIJEDI SUHOG ZLATA",
+      "MIRNA GLAVA JE NAJBOLJI SAVJETNIK",
+      "PRVI MAČIĆI SE U VODU BACAJU",
+      "ZRNCE PO ZRNCE POGAČA",
+      "GDJE IMA VOLJE IMA I NAČINA",
+      "STARA LJUBAV ZABORAVA NEMA",
+      "JEDNA LASTA NE ČINI PROLJEĆE",
+      "BOLJE SPRIJEČITI NEGO LIJEČITI",
+      "TKO ČEKA TAJ DOČEKA",
+      "ZNANJE JE BLAGO KOJE NITKO NE MOŽE UZETI",
+      "LIJEPA RIJEČ I ŽELJEZNA VRATA OTVARA",
+      "SVAKOG GOSTA TRI DANA DOSTA"
+    ];
+
+    function getWeekKey(date = new Date()) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+    }
+
+    function getTodayKey(date = new Date()) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function defaultState() {
+      return {
+        points: 0,
+        dayKey: getTodayKey(),
+        freeGamesUsedToday: 0,
+        extraGamesAvailable: 0,
+        mode: "solo",
+        playerName: "Igrač 1",
+        teamName: "Ekipa Školica",
+        emblem: "kreda",
+        tier: "bakar",
+        soundOn: true,
+        fontScaleIndex: 0,
+        seenIds: [],
+        weeklyScores: {},
+        history: []
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        const st = Object.assign(defaultState(), parsed);
+        const today = getTodayKey();
+        if (st.dayKey !== today) {
+          st.dayKey = today;
+          st.freeGamesUsedToday = 0;
+        }
+        return st;
+      } catch (e) {
+        return defaultState();
+      }
+    }
+
+    let state = loadState();
+    let gameSession = null;
+    let audioCtx = null;
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function applyFontScale() {
+      const idx = Math.max(0, Math.min(FONT_SCALES.length - 1, Number(state.fontScaleIndex) || 0));
+      const scale = FONT_SCALES[idx];
+      document.documentElement.style.setProperty("--font-scale", String(scale));
+      const btn = document.getElementById("fontSizeBtn");
+      if (btn) btn.textContent = `🔍 Slova: ${Math.round(scale * 100)}%`;
+    }
+
+    function cycleFontScale() {
+      state.fontScaleIndex = ((Number(state.fontScaleIndex) || 0) + 1) % FONT_SCALES.length;
+      saveState();
+      applyFontScale();
+      showToast(`Veličina slova postavljena na ${Math.round(FONT_SCALES[state.fontScaleIndex] * 100)}%.`);
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById("toastBox");
+      box.textContent = msg;
+      box.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => box.classList.remove("show"), 2600);
+    }
+
+    function playTone(type = "ok") {
+      if (!state.soundOn) return;
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new Ctx();
+        }
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        if (type === "ok") {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.14);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.start(now);
+          osc.stop(now + 0.19);
+        } else if (type === "bad") {
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.linearRampToValueAtTime(145, now + 0.22);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(660, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        }
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      state.soundOn = !state.soundOn;
+      saveState();
+      updateTopbar();
+      showToast(state.soundOn ? "Zvuk je uključen" : "Zvuk je isključen");
+    }
+
+    function getRankName(pts) {
+      if (pts >= 12000) return "Platina";
+      if (pts >= 5000) return "Zlato";
+      if (pts >= 1500) return "Srebro";
+      return "Bakar";
+    }
+
+    function remainingFreeGames() {
+      return Math.max(0, DAILY_FREE_GAMES - state.freeGamesUsedToday);
+    }
+
+    function canPlayFreeOrBonus() {
+      return remainingFreeGames() > 0 || state.extraGamesAvailable > 0;
+    }
+
+    function updateTopbar() {
+      applyFontScale();
+      document.getElementById("topPoints").textContent = state.points.toLocaleString("hr-HR");
+      const remFree = remainingFreeGames();
+      const extraText = state.extraGamesAvailable > 0 ? ` (+${state.extraGamesAvailable})` : "";
+      document.getElementById("topGames").textContent = `${remFree}/${DAILY_FREE_GAMES}${extraText}`;
+      document.getElementById("topRank").textContent = getRankName(state.points);
+      document.getElementById("soundToggleBtn").textContent = state.soundOn ? "🔊 Zvuk: ON" : "🔇 Zvuk: OFF";
+      document.getElementById("weeklyLabel").textContent = `Tjedni ciklus (${getWeekKey()}) • Pon–Ned`;
+      renderStartWidgets();
+      renderSetupQuota();
+    }
+
+    function renderStartWidgets() {
+      const wk = getWeekKey();
+      const wkMap = state.weeklyScores[wk] || {};
+      const entries = Object.entries(wkMap).sort((a, b) => b[1] - a[1]);
+      const champBox = document.getElementById("weeklyChampBox");
+      if (!entries.length) {
+        champBox.innerHTML = `<p style="color:var(--chalk-muted); margin:0; font-size:0.95rem;">Još nema upisanih tjednih rezultata za ovaj tjedan. Budi prvi na vrhu!</p>`;
+      } else {
+        champBox.innerHTML = entries.slice(0, 5).map(([name, sc], idx) => `
+          <div class="history-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>${idx === 0 ? "👑" : `#${idx + 1}`} ${escapeHtml(name)}</strong></span>
+            <span style="color:var(--chalk-gold); font-weight:800;">${Number(sc).toLocaleString("hr-HR")} bod.</span>
+          </div>
+        `).join("");
+      }
+
+      const histBox = document.getElementById("recentHistoryBox");
+      if (!state.history.length) {
+        histBox.innerHTML = `<p style="color:var(--chalk-muted); margin:0; font-size:0.95rem;">Nema još odigranih rundi. Pokreni prvu partiju i upiši rezultat!</p>`;
+      } else {
+        histBox.innerHTML = state.history.slice(0, 5).map(h => `
+          <div class="history-item">
+            <div style="display:flex; justify-content:space-between; gap:8px;">
+              <strong>${escapeHtml(h.actor)}</strong>
+              <span style="color:var(--chalk-mint); font-weight:800;">+${Number(h.points).toLocaleString("hr-HR")} bod.</span>
+            </div>
+            <div style="color:var(--chalk-muted); font-size:0.84rem; margin-top:2px;">
+              ${escapeHtml(h.tierName)} (${escapeHtml(h.diffLabel)}) • ${h.correctCount}/10 točnih • ${escapeHtml(h.dateLabel)}
+            </div>
+          </div>
+        `).join("");
+      }
+    }
+
+    function showScreen(name) {
+      document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
+      const target = document.getElementById(`screen-${name}`);
+      if (target) target.classList.add("active");
+      updateTopbar();
+      if (name === "setup") syncSetupUI();
+    }
+
+    function setMode(m) {
+      state.mode = m;
+      saveState();
+      syncSetupUI();
+    }
+
+    function syncSetupUI() {
+      document.getElementById("modeSoloBtn").classList.toggle("selected", state.mode === "solo");
+      document.getElementById("modeTeamBtn").classList.toggle("selected", state.mode === "team");
+      const label = document.getElementById("nameLabel");
+      const input = document.getElementById("playerNameInput");
+      if (state.mode === "team") {
+        label.textContent = "Naziv tima";
+        input.value = state.teamName || "Ekipa Školica";
+      } else {
+        label.textContent = "Ime igrača";
+        input.value = state.playerName || "Igrač 1";
+      }
+
+      const embGrid = document.getElementById("emblemGrid");
+      embGrid.innerHTML = EMBLEMS.map(e => `
+        <button type="button" class="emblem-btn ${state.emblem === e.id ? "selected" : ""}" onclick="selectEmblem('${e.id}')">
+          <span class="ico">${e.ico}</span>
+          <span>${e.label}</span>
+        </button>
+      `).join("");
+
+      const tierGrid = document.getElementById("tierGrid");
+      tierGrid.innerHTML = TIERS.map(t => `
+        <div class="tier-card ${state.tier === t.id ? "selected" : ""}" onclick="selectTier('${t.id}')">
+          <div class="tier-top">
+            <span>${t.trophy} ${t.name} — ${t.diffLabel}</span>
+            <span>x${t.mult}</span>
+          </div>
+          <div class="tier-sub">${t.desc}</div>
+        </div>
+      `).join("");
+
+      renderSetupQuota();
+    }
+
+    function selectEmblem(id) {
+      state.emblem = id;
+      saveState();
+      syncSetupUI();
+    }
+
+    function selectTier(id) {
+      state.tier = id;
+      saveState();
+      syncSetupUI();
+    }
+
+    function persistNameFromInput() {
+      const input = document.getElementById("playerNameInput");
+      if (!input) return;
+      const val = input.value.trim();
+      if (state.mode === "team") {
+        state.teamName = val || "Ekipa Školica";
+      } else {
+        state.playerName = val || "Igrač 1";
+      }
+      saveState();
+    }
+
+    function renderSetupQuota() {
+      const el = document.getElementById("quotaStatusText");
+      const startBtn = document.getElementById("startRoundBtn");
+      const buyBtn = document.getElementById("buyRoundBtn");
+      if (!el || !startBtn || !buyBtn) return;
+
+      const remFree = remainingFreeGames();
+      if (remFree > 0) {
+        el.innerHTML = `✅ Dostupno besplatnih partija danas: <strong>${remFree}</strong> od ${DAILY_FREE_GAMES}.`;
+        startBtn.disabled = false;
+        buyBtn.style.display = "none";
+      } else if (state.extraGamesAvailable > 0) {
+        el.innerHTML = `🎟️ Iskoristila si besplatne partije danas, ali imaš <strong>${state.extraGamesAvailable}</strong> kupljenu dodatnu partiju.`;
+        startBtn.disabled = false;
+        buyBtn.style.display = "none";
+      } else {
+        el.innerHTML = `⏳ Potrošene su sve 3 besplatne dnevne partije. Možeš kupiti novu partiju za <strong>${EXTRA_GAME_COST.toLocaleString("hr-HR")} bodova</strong> (trenutno imaš <strong>${state.points.toLocaleString("hr-HR")}</strong> bodova).`;
+        startBtn.disabled = true;
+        buyBtn.style.display = "inline-flex";
+        buyBtn.disabled = state.points < EXTRA_GAME_COST;
+      }
+    }
+
+    function buyExtraGame() {
+      if (state.points < EXTRA_GAME_COST) {
+        showToast("Nemaš dovoljno bodova za kupnju partije (potrebno 5.000).");
+        return;
+      }
+      state.points -= EXTRA_GAME_COST;
+      state.extraGamesAvailable += 1;
+      saveState();
+      playTone("ok");
+      showToast("Kupljena 1 dodatna partija za 5.000 bodova!");
+      updateTopbar();
+    }
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Miješa ponuđene odgovore pitanja i ažurira indeks točnog odgovora
+    function prepareShuffledMcItem(rawItem) {
+      const safeAns =
+        typeof rawItem.ans === "number" && rawItem.ans >= 0 && rawItem.ans < rawItem.opts.length
+          ? rawItem.ans
+          : 0;
+      const correctLabel = rawItem.opts[safeAns];
+      const tagged = rawItem.opts.map(opt => ({
+        label: opt,
+        isCorrect: opt === correctLabel
+      }));
+      shuffleArray(tagged);
+      const newAns = tagged.findIndex(x => x.isCorrect);
+      return {
+        ...rawItem,
+        opts: tagged.map(x => x.label),
+        ans: newAns === -1 ? 0 : newAns
+      };
+    }
+
+    // GENERATOR DINAMIČKE MATEMATIKE (NE PONAVLJA SE)
+    function generateMathItem(tierId) {
+      const mult = tierId === "platina" ? 3 : tierId === "zlato" ? 2.2 : tierId === "srebro" ? 1.6 : 1;
+      const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      const kind = rnd(1, 5);
+      let q = "", answer = 0, dyk = "";
+
+      if (kind === 1) {
+        const a = rnd(18, Math.round(65 * mult));
+        const b = rnd(14, Math.round(55 * mult));
+        const c = rnd(5, 25);
+        answer = a + b - c;
+        q = `Koliko je (${a} + ${b}) − ${c}?`;
+        dyk = `Prvo zbroji ${a} i ${b} (${a + b}), pa oduzmi ${c} i dobiješ ${answer}.`;
+      } else if (kind === 2) {
+        const a = rnd(7, Math.round(14 * Math.min(2.2, mult)));
+        const b = rnd(6, 13);
+        const add = rnd(10, 45);
+        answer = a * b + add;
+        q = `Koliko je ${a} × ${b} + ${add}?`;
+        dyk = `Množenje ima prednost: ${a} × ${b} = ${a * b}, a zatim dodaj ${add} = ${answer}.`;
+      } else if (kind === 3) {
+        const div = rnd(4, 12);
+        const quot = rnd(8, Math.round(18 * Math.min(2, mult)));
+        const total = div * quot;
+        const sub = rnd(3, 18);
+        answer = quot - sub;
+        q = `Koliko je (${total} ÷ ${div}) − ${sub}?`;
+        dyk = `${total} podijeljeno s ${div} daje ${quot}, a kad oduzmeš ${sub}, ostaje ${answer}.`;
+      } else if (kind === 4) {
+        const base = rnd(12, Math.round(25 * Math.min(2, mult)));
+        const step = rnd(4, 15);
+        const n4 = base + step * 3;
+        const n5 = base + step * 4;
+        answer = n5;
+        q = `Koji je sljedeći broj u nizu: ${base}, ${base + step}, ${base + step * 2}, ${n4}, ?`;
+        dyk = `Svaki sljedeći član niza veći je za ${step}, pa je idući broj ${n5}.`;
+      } else {
+        const pct = [10, 20, 25, 50][rnd(0, 3)];
+        const val = rnd(4, 24) * 20;
+        answer = (val * pct) / 100;
+        q = `Koliko iznosi ${pct}% od ${val}?`;
+        dyk = `${pct}% je isto što i ${pct}/100, pa je ${pct}% od ${val} jednako ${answer}.`;
+      }
+
+      const distractors = new Set();
+      while (distractors.size < 3) {
+        const delta = rnd(2, 14) * (Math.random() < 0.5 ? -1 : 1);
+        const cand = answer + delta;
+        if (cand !== answer && cand >= 0) distractors.add(cand);
+      }
+      const optsRaw = [
+        { label: String(answer), correct: true },
+        ...Array.from(distractors).map(d => ({ label: String(d), correct: false }))
+      ];
+      shuffleArray(optsRaw);
+      const ansIndex = optsRaw.findIndex(o => o.correct);
+
+      return {
+        id: `math_${q}_${answer}`,
+        category: "Brza matematika",
+        type: "mc",
+        q,
+        opts: optsRaw.map(o => o.label),
+        ans: ansIndex,
+        dyk
+      };
+    }
+
+    function buildQuestionPool() {
+      const list = [];
+      Object.entries(RAW_QUESTIONS).forEach(([cat, arr]) => {
+        arr.forEach((item, idx) => {
+          list.push({
+            id: `q_${cat}_${idx}`,
+            category: cat,
+            type: "mc",
+            q: item.q,
+            opts: item.opts,
+            ans: item.ans,
+            dyk: item.dyk
+          });
+        });
+      });
+      SENTENCE_POOL.forEach((sent, idx) => {
+        list.push({
+          id: `s_${idx}`,
+          category: "Otključaj rečenicu",
+          type: "sentence",
+          sentence: sent,
+          dyk: `Tajna rečenica glasi: „${sent}”.`
+        });
+      });
+      return list;
+    }
+
+    function pickTenItems(tierId) {
+      const fullPool = buildQuestionPool();
+      const seenSet = new Set(state.seenIds);
+
+      let unseen = fullPool.filter(item => !seenSet.has(item.id));
+      if (unseen.length < 8) {
+        state.seenIds = [];
+        saveState();
+        unseen = fullPool.slice();
+        showToast("Prošla je cijela baza — krug pitanja je svježe obnovljen!");
+      }
+
+      shuffleArray(unseen);
+      const chosen = [];
+
+      const sentences = unseen.filter(x => x.type === "sentence");
+      if (sentences.length > 0) {
+        chosen.push(sentences[0]);
+      }
+      const mathItem = generateMathItem(tierId);
+      chosen.push(mathItem);
+
+      const usedIds = new Set(chosen.map(c => c.id));
+      for (const item of unseen) {
+        if (chosen.length >= 10) break;
+        if (!usedIds.has(item.id)) {
+          chosen.push(item);
+          usedIds.add(item.id);
+        }
+      }
+
+      shuffleArray(chosen);
+      const prepared = chosen.slice(0, 10).map(item =>
+        item.type === "mc" ? prepareShuffledMcItem(item) : item
+      );
+
+      prepared.forEach(item => {
+        if (!item.id.startsWith("math_") && !state.seenIds.includes(item.id)) {
+          state.seenIds.push(item.id);
+        }
+      });
+      saveState();
+      return prepared;
+    }
+
+    function quickStart() {
+      if (!canPlayFreeOrBonus()) {
+        showScreen("setup");
+        showToast("Potrebno je 5.000 bodova za novu partiju.");
+        return;
+      }
+      startGame();
+    }
+
+    function startGame() {
+      persistNameFromInput();
+      if (remainingFreeGames() > 0) {
+        state.freeGamesUsedToday += 1;
+      } else if (state.extraGamesAvailable > 0) {
+        state.extraGamesAvailable -= 1;
+      } else {
+        showToast("Nema dostupnih partija. Zamijeni 5.000 bodova na zaslonu postavki.");
+        showScreen("setup");
+        return;
+      }
+
+      const tierObj = TIERS.find(t => t.id === state.tier) || TIERS[0];
+      const embObj = EMBLEMS.find(e => e.id === state.emblem) || EMBLEMS[0];
+      const actor = state.mode === "team"
+        ? `${embObj.ico} Tim: ${state.teamName || "Ekipa Školica"}`
+        : `${embObj.ico} ${state.playerName || "Igrač 1"}`;
+
+      const items = pickTenItems(tierObj.id);
+      gameSession = {
+        actor,
+        tier: tierObj,
+        items,
+        index: 0,
+        roundScore: 0,
+        correctCount: 0,
+        fieldStatuses: Array(10).fill("idle"),
+        jokers: { fifty: true, hint: true },
+        eliminatedOpts: [],
+        revealedChars: new Set(),
+        guessedLetters: new Set(),
+        answeredCurrent: false,
+        lastWasCorrect: false
+      };
+
+      saveState();
+      updateTopbar();
+      showScreen("game");
+      renderCurrentField();
+    }
+
+    function renderCurrentField() {
+      if (!gameSession) return;
+      const { items, index, roundScore, tier, actor, fieldStatuses } = gameSession;
+      document.getElementById("activePlayerBadge").textContent = actor;
+      document.getElementById("activeTierBadge").textContent = `${tier.trophy} ${tier.name} — ${tier.diffLabel} (x${tier.mult})`;
+      document.getElementById("fieldCounter").textContent = `${index + 1} / 10`;
+      document.getElementById("roundScore").textContent = roundScore.toLocaleString("hr-HR");
+
+      const track = document.getElementById("fieldsTrack");
+      track.innerHTML = Array.from({ length: 10 }, (_, i) => {
+        let cls = "field-node";
+        if (i === index) cls += " current";
+        else if (fieldStatuses[i] === "ok") cls += " done";
+        else if (fieldStatuses[i] === "bad") cls += " missed";
+        return `<div class="${cls}">Polje ${i + 1}</div>`;
+      }).join("");
+
+      const item = items[index];
+      const container = document.getElementById("questionContainer");
+      gameSession.answeredCurrent = false;
+      gameSession.eliminatedOpts = [];
+      gameSession.revealedChars = new Set();
+      gameSession.guessedLetters = new Set();
+
+      if (item.type === "mc") {
+        container.innerHTML = `
+          <span class="category-tag">${escapeHtml(item.category)}</span>
+          <p class="question-text">${escapeHtml(item.q)}</p>
+          <div class="options-list" id="optionsList">
+            ${item.opts.map((opt, idx) => `
+              <button type="button" class="opt-btn" id="optBtn_${idx}" onclick="answerMc(${idx})">
+                ${escapeHtml(opt)}
+              </button>
+            `).join("")}
+          </div>
+          <div class="jokers-bar">
+            <button type="button" class="btn btn-sky btn-sm" id="joker50Btn" onclick="useJokerFifty()" ${!gameSession.jokers.fifty ? "disabled" : ""}>
+              ✂️ Džoker 50/50
+            </button>
+            <button type="button" class="btn btn-ghost btn-sm" style="color:var(--panel-text); border-color:#94a3b8;" id="jokerHintBtn" onclick="useJokerHint()" ${!gameSession.jokers.hint ? "disabled" : ""}>
+              💡 Džoker trag
+            </button>
+          </div>
+          <div id="afterAnswerArea"></div>
+        `;
+      } else {
+        const upper = item.sentence.toUpperCase();
+        for (let i = 0; i < upper.length; i++) {
+          const ch = upper[i];
+          if (!/[A-ZČĆŽŠĐ]/.test(ch)) {
+            gameSession.revealedChars.add(i);
+          }
+        }
+        ["A", "E", "O"].forEach(letC => {
+          const pos = upper.indexOf(letC);
+          if (pos !== -1) gameSession.revealedChars.add(pos);
+        });
+
+        const letters = "ABCČĆDĐEFGHIJKLMNOPRSŠTUVZŽ".split("");
+        container.innerHTML = `
+          <span class="category-tag">🧩 ${escapeHtml(item.category)}</span>
+          <p class="question-text">Pogodi skrivenu rečenicu — po slovu ili upiši cijelu rečenicu!</p>
+          <div class="sentence-display" id="sentenceMasked">${formatMaskedSentence(upper, gameSession.revealedChars)}</div>
+          <div class="sentence-input-row">
+            <input type="text" id="fullSentenceInput" class="input-text" style="flex:1; min-width:200px;" placeholder="Upiši cijelu rečenicu ovdje..." />
+            <button type="button" class="btn btn-mint" onclick="submitFullSentence()">✅ Pogodi rečenicu</button>
+          </div>
+          <div class="alpha-pad" id="alphaPad">
+            ${letters.map(l => `<button type="button" class="alpha-key" id="key_${l}" onclick="guessLetter('${l}')">${l}</button>`).join("")}
+          </div>
+          <div id="afterAnswerArea"></div>
+        `;
+      }
+    }
+
+    function formatMaskedSentence(upper, revealedSet) {
+      return upper.split("").map((ch, idx) => {
+        if (ch === " ") return "  /  ";
+        if (!/[A-ZČĆŽŠĐ]/.test(ch)) return ch;
+        return revealedSet.has(idx) ? ch : "_";
+      }).join(" ");
+    }
+
+    function guessLetter(letter) {
+      if (!gameSession || gameSession.answeredCurrent) return;
+      const item = gameSession.items[gameSession.index];
+      const upper = item.sentence.toUpperCase();
+      gameSession.guessedLetters.add(letter);
+      const keyBtn = document.getElementById(`key_${letter}`);
+      if (keyBtn) keyBtn.disabled = true;
+
+      let foundAny = false;
+      for (let i = 0; i < upper.length; i++) {
+        if (upper[i] === letter) {
+          gameSession.revealedChars.add(i);
+          foundAny = true;
+        }
+      }
+
+      document.getElementById("sentenceMasked").textContent = formatMaskedSentence(upper, gameSession.revealedChars);
+
+      const allRevealed = upper.split("").every((ch, idx) => !/[A-ZČĆŽŠĐ]/.test(ch) || gameSession.revealedChars.has(idx));
+      if (allRevealed) {
+        finishCurrentField(true, `Otključala si cijelu rečenicu: „${item.sentence}”!`, item.dyk);
+      } else {
+        playTone(foundAny ? "ok" : "tap");
+        showToast(foundAny ? `Slovo "${letter}" je u rečenici!` : `Nema slova "${letter}".`);
+      }
+    }
+
+    function submitFullSentence() {
+      if (!gameSession || gameSession.answeredCurrent) return;
+      const input = document.getElementById("fullSentenceInput");
+      if (!input) return;
+      const guess = normalizeHr(input.value.trim());
+      const item = gameSession.items[gameSession.index];
+      const target = normalizeHr(item.sentence);
+      if (!guess) {
+        showToast("Upiši rečenicu prije potvrde.");
+        return;
+      }
+      if (guess === target) {
+        for (let i = 0; i < item.sentence.length; i++) gameSession.revealedChars.add(i);
+        document.getElementById("sentenceMasked").textContent = item.sentence.toUpperCase();
+        finishCurrentField(true, `Točno! Otključala si rečenicu: „${item.sentence}”.`, item.dyk);
+      } else {
+        playTone("bad");
+        showToast("Nije točno — probaj još koje slovo ili ponovno upiši rečenicu.");
+      }
+    }
+
+    function normalizeHr(s) {
+      return s.toUpperCase().replace(/\s+/g, " ").trim();
+    }
+
+    function useJokerFifty() {
+      if (!gameSession || !gameSession.jokers.fifty || gameSession.answeredCurrent) return;
+      const item = gameSession.items[gameSession.index];
+      if (item.type !== "mc") return;
+      gameSession.jokers.fifty = false;
+      document.getElementById("joker50Btn").disabled = true;
+
+      const wrongIndices = item.opts.map((_, i) => i).filter(i => i !== item.ans);
+      shuffleArray(wrongIndices);
+      wrongIndices.slice(0, 2).forEach(i => {
+        gameSession.eliminatedOpts.push(i);
+        const btn = document.getElementById(`optBtn_${i}`);
+        if (btn) btn.classList.add("eliminated");
+      });
+      playTone("tap");
+      showToast("Džoker 50/50 uklonio je dva netočna odgovora.");
+    }
+
+    function useJokerHint() {
+      if (!gameSession || !gameSession.jokers.hint || gameSession.answeredCurrent) return;
+      const item = gameSession.items[gameSession.index];
+      if (item.type !== "mc") return;
+      gameSession.jokers.hint = false;
+      document.getElementById("jokerHintBtn").disabled = true;
+      playTone("tap");
+      showToast(`Trag: točan odgovor počinje na slovo "${item.opts[item.ans].charAt(0).toUpperCase()}".`);
+    }
+
+    function answerMc(choiceIdx) {
+      if (!gameSession || gameSession.answeredCurrent) return;
+      const item = gameSession.items[gameSession.index];
+      const isCorrect = choiceIdx === item.ans;
+
+      item.opts.forEach((_, idx) => {
+        const btn = document.getElementById(`optBtn_${idx}`);
+        if (!btn) return;
+        btn.disabled = true;
+        if (idx === item.ans) btn.classList.add("correct");
+        else if (idx === choiceIdx && !isCorrect) btn.classList.add("wrong");
+      });
+
+      const msg = isCorrect
+        ? `Točno! Odgovor je „${item.opts[item.ans]}”.`
+        : `Nije točno. Pravi odgovor je „${item.opts[item.ans]}”.`;
+      finishCurrentField(isCorrect, msg, item.dyk);
+    }
+
+    function finishCurrentField(isCorrect, statusMessage, dykText) {
+      gameSession.answeredCurrent = true;
+      gameSession.lastWasCorrect = isCorrect;
+      const basePts = 250 + gameSession.index * 50;
+      const earned = isCorrect ? Math.round(basePts * gameSession.tier.mult) : 0;
+
+      if (isCorrect) {
+        gameSession.roundScore += earned;
+        gameSession.correctCount += 1;
+        gameSession.fieldStatuses[gameSession.index] = "ok";
+        playTone("ok");
+      } else {
+        gameSession.fieldStatuses[gameSession.index] = "bad";
+        playTone("bad");
+      }
+
+      document.getElementById("roundScore").textContent = gameSession.roundScore.toLocaleString("hr-HR");
+      const track = document.getElementById("fieldsTrack");
+      if (track.children[gameSession.index]) {
+        track.children[gameSession.index].className = `field-node ${isCorrect ? "done" : "missed"}`;
+      }
+
+      const nextLabel = gameSession.index < 9 ? "Sljedeće polje →" : "Završi partiju 🏆";
+      const area = document.getElementById("afterAnswerArea");
+      area.innerHTML = `
+        <div style="margin-top:14px; padding:13px 15px; border-radius:12px; background:${isCorrect ? "#ecfdf5" : "#fef2f2"}; border:1px solid ${isCorrect ? "#86efac" : "#fca5a5"}; color:#1e293b; font-size:1rem;">
+          <strong>${escapeHtml(statusMessage)}</strong>
+          ${isCorrect ? `<span style="margin-left:8px; color:#15803d; font-weight:800;">(+${earned.toLocaleString("hr-HR")} bod.)</span>` : ""}
+        </div>
+
+        <div class="did-you-know" id="dykBox">
+          <div class="did-you-know-head">
+            <span>💡 Jeste li znali?</span>
+            <button type="button" class="btn btn-ghost btn-sm" style="color:#422006; border-color:#eab308;" onclick="skipDyk()">Preskoči</button>
+          </div>
+          <div style="font-size:0.98rem; line-height:1.45;">${escapeHtml(dykText)}</div>
+        </div>
+
+        <div style="margin-top:14px; text-align:right;">
+          <button type="button" class="btn btn-gold" onclick="advanceField()">${nextLabel}</button>
+        </div>
+      `;
+    }
+
+    function skipDyk() {
+      const box = document.getElementById("dykBox");
+      if (box) box.style.display = "none";
+      playTone("tap");
+    }
+
+    function advanceField() {
+      if (!gameSession) return;
+      if (gameSession.index < 9) {
+        gameSession.index += 1;
+        renderCurrentField();
+      } else {
+        completeRound();
+      }
+    }
+
+    function completeRound() {
+      const bonus = gameSession.correctCount === 10 ? Math.round(500 * gameSession.tier.mult) : 0;
+      const totalRoundPts = gameSession.roundScore + bonus;
+
+      state.points += totalRoundPts;
+      const wk = getWeekKey();
+      if (!state.weeklyScores[wk]) state.weeklyScores[wk] = {};
+      const actorKey = gameSession.actor;
+      state.weeklyScores[wk][actorKey] = (state.weeklyScores[wk][actorKey] || 0) + totalRoundPts;
+
+      state.history.unshift({
+        actor: actorKey,
+        tierName: gameSession.tier.name,
+        diffLabel: gameSession.tier.diffLabel,
+        points: totalRoundPts,
+        correctCount: gameSession.correctCount,
+        dateLabel: new Date().toLocaleDateString("hr-HR")
+      });
+      state.history = state.history.slice(0, 30);
+      saveState();
+      updateTopbar();
+
+      const summaryCard = document.getElementById("summaryCard");
+      summaryCard.innerHTML = `
+        <h2 style="margin-top:0;">Partija završena! ${gameSession.tier.trophy}</h2>
+        <p style="color:var(--panel-muted); margin-top:4px;">
+          <strong>${escapeHtml(gameSession.actor)}</strong> • Rang: <strong>${escapeHtml(gameSession.tier.name)} (${escapeHtml(gameSession.tier.diffLabel)})</strong>
+        </p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin:16px 0;">
+          <div style="padding:12px; border-radius:12px; background:#f8fafc; border:1px solid #cbd5e1;">
+            <div style="font-size:0.86rem; color:var(--panel-muted);">Točni odgovori</div>
+            <div style="font-size:1.4rem; font-weight:900;">${gameSession.correctCount} / 10</div>
+          </div>
+          <div style="padding:12px; border-radius:12px; background:#f8fafc; border:1px solid #cbd5e1;">
+            <div style="font-size:0.86rem; color:var(--panel-muted);">Bodovi runde</div>
+            <div style="font-size:1.4rem; font-weight:900; color:#15803d;">+${totalRoundPts.toLocaleString("hr-HR")}</div>
+          </div>
+          <div style="padding:12px; border-radius:12px; background:#f8fafc; border:1px solid #cbd5e1;">
+            <div style="font-size:0.86rem; color:var(--panel-muted);">Ukupni bodovi</div>
+            <div style="font-size:1.4rem; font-weight:900; color:#b45309;">${state.points.toLocaleString("hr-HR")}</div>
+          </div>
+        </div>
+        ${bonus > 0 ? `<p style="color:#15803d; font-weight:800;">🎉 Savršen niz 10/10! Dodatni bonus: +${bonus} bodova.</p>` : ""}
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;">
+          <button class="btn btn-mint" onclick="showScreen('setup')">⚙️ Nova partija / Postavke</button>
+          <button class="btn btn-ghost" style="color:var(--panel-text); border-color:#94a3b8;" onclick="showScreen('start')">🏠 Početni ekran</button>
+        </div>
+      `;
+
+      gameSession = null;
+      showScreen("summary");
+    }
+
+    function quitToStart() {
+      gameSession = null;
+      showScreen("start");
+      showToast("Runda je prekinuta.");
+    }
+
+    function openPoolInfo() {
+      const total = buildQuestionPool().length;
+      const seenCount = state.seenIds.length;
+      const remaining = Math.max(0, total - seenCount);
+      showToast(`Baza ima ${total} fiksne stavke + dinamičku matematiku • Neviđeno još oko ${remaining} stavki.`);
+    }
+
+    function openResetModal() {
+      document.getElementById("resetModal").classList.add("open");
+    }
+
+    function closeResetModal() {
+      document.getElementById("resetModal").classList.remove("open");
+    }
+
+    function resetSeenOnly() {
+      state.seenIds = [];
+      saveState();
+      closeResetModal();
+      showToast("Popis viđenih pitanja je osvježen!");
+    }
+
+    function resetEverything() {
+      localStorage.removeItem(STORAGE_KEY);
+      state = defaultState();
+      saveState();
+      closeResetModal();
+      updateTopbar();
+      showScreen("start");
+      showToast("Svi podaci su resetirani.");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    updateTopbar();
+  </script>
+</body>
+</html>
