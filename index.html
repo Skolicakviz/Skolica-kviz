@@ -22,7 +22,6 @@
       --accent-green: #16a34a;
       --accent-rose: #e11d48;
       --card-bg: #fcfbf7;
-      --card-border: rgba(34, 38, 44, 0.25);
       --radius: 18px;
       --shadow: 0 10px 24px rgba(34, 38, 44, 0.08);
     }
@@ -115,11 +114,6 @@
       color: #14532d;
     }
 
-    .btn-primary:hover:not(:disabled) {
-      background: rgba(22, 163, 74, 0.24);
-      border-color: var(--accent-green);
-    }
-
     .btn-gold {
       background: rgba(217, 119, 6, 0.15);
       border-color: var(--accent-gold);
@@ -147,15 +141,6 @@
       padding: 20px 16px;
       box-shadow: var(--shadow);
       margin-bottom: 14px;
-    }
-
-    /* Početni ekran — nacrtana školica kredom */
-    .hopscotch-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 0 12px;
     }
 
     .chalk-title {
@@ -190,18 +175,26 @@
       color: var(--chalk);
     }
 
-    .hopscotch-grid {
-      width: 100%;
-      max-width: 340px;
+    .hopscotch-wrap {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 10px;
+      padding: 8px 0 12px;
+    }
+
+    .hopscotch-grid {
+      width: 100%;
+      max-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
     }
 
     .hop-row-pair {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 9px;
     }
 
     .hop-single {
@@ -210,11 +203,11 @@
     }
 
     .hop-single .chalk-cell {
-      width: calc(50% - 5px);
+      width: calc(50% - 4.5px);
     }
 
     .chalk-cell {
-      min-height: 66px;
+      min-height: 60px;
       border: 2.5px dashed rgba(34, 38, 44, 0.55);
       border-radius: 16px 8px 18px 10px / 10px 18px 8px 16px;
       display: flex;
@@ -224,7 +217,6 @@
       font-weight: 800;
       color: var(--chalk);
       background: #ffffff;
-      position: relative;
       user-select: none;
     }
 
@@ -242,19 +234,19 @@
 
     .start-cell-btn {
       width: 100%;
-      min-height: 86px;
+      min-height: 84px;
       border: 3px dashed var(--start-red);
       border-radius: 20px 10px 22px 12px / 12px 22px 10px 20px;
-      background: rgba(220, 38, 38, 0.1);
+      background: rgba(220, 38, 38, 0.12);
       color: var(--start-red);
       font-family: "Caveat", cursive;
-      font-size: clamp(2.6rem, 8vw, 3.5rem);
+      font-size: clamp(2.8rem, 8.5vw, 3.7rem);
       font-weight: 700;
       line-height: 0.95;
       letter-spacing: 2px;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.16);
-      transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.18);
+      transition: transform 0.12s ease, background 0.15s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -265,23 +257,17 @@
       font-family: "Plus Jakarta Sans", sans-serif;
       font-size: 0.72rem;
       letter-spacing: 1px;
-      opacity: 0.85;
+      opacity: 0.88;
       font-weight: 800;
       color: var(--start-red-dark);
       margin-bottom: 2px;
     }
 
     .start-cell-btn:hover {
-      background: rgba(220, 38, 38, 0.17);
+      background: rgba(220, 38, 38, 0.2);
       transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 9px 22px rgba(220, 38, 38, 0.22);
     }
 
-    .start-cell-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* Izbor načina i postavki */
     .section-heading {
       margin: 0 0 12px;
       font-size: 1.25rem;
@@ -304,14 +290,12 @@
       text-align: left;
       color: var(--chalk);
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
     .choice-card.selected {
       border-style: solid;
       border-color: var(--accent-teal);
       background: rgba(15, 118, 110, 0.1);
-      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2);
     }
 
     .choice-card strong {
@@ -346,12 +330,6 @@
       font-weight: 600;
     }
 
-    .nick-input:focus {
-      outline: none;
-      border-style: solid;
-      border-color: var(--accent-teal);
-    }
-
     .pill-group {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -378,7 +356,6 @@
       color: #78350f;
     }
 
-    /* Igra — svijetla kreda površina */
     .hud {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -455,7 +432,7 @@
     }
 
     .opt-btn {
-      padding: 14px 14px;
+      padding: 14px;
       border-radius: 14px;
       border: 2px dashed var(--chalk-line);
       background: #ffffff;
@@ -464,8 +441,6 @@
       font-weight: 700;
       text-align: left;
       cursor: pointer;
-      box-shadow: 0 2px 0 rgba(34, 38, 44, 0.08);
-      transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
     }
 
     .opt-btn:hover:not(:disabled) {
@@ -488,7 +463,6 @@
       color: #881337;
     }
 
-    /* Otključaj rečenicu */
     .clue-banner {
       display: inline-block;
       background: rgba(15, 118, 110, 0.14);
@@ -565,13 +539,6 @@
       font-size: 1.08rem;
       font-weight: 800;
       cursor: pointer;
-      touch-action: manipulation;
-    }
-
-    .key-btn:hover:not(:disabled) {
-      background: #fffdf8;
-      border-style: solid;
-      border-color: var(--accent-teal);
     }
 
     .key-btn.hit {
@@ -605,7 +572,6 @@
       display: block;
     }
 
-    /* Tablica tko vodi */
     .summary-banner {
       background: rgba(15, 118, 110, 0.14);
       border: 1.5px dashed var(--accent-teal);
@@ -658,6 +624,16 @@
       font-size: 0.82rem;
       color: var(--chalk-soft);
     }
+
+    /* Završna zaštita da ništa ne ostane tamno */
+    body, .card, .quota-pill, .hud-box, .badge, .sentence-board, .feedback-box, .board-item {
+      color: #22262c !important;
+    }
+    body { background-color: #f4f1ea !important; }
+    .card, .quota-pill, .hud-box, .badge, .sentence-board, .feedback-box, .board-item { background: #fcfbf7 !important; }
+    .chalk-cell, .btn, .opt-btn, .key-btn, .choice-card, .pill-btn, .nick-input { background: #ffffff !important; color: #22262c !important; }
+    .start-cell-btn { background: #dc2626 !important; color: #ffffff !important; border-color: #7f1d1d !important; }
+    .start-cell-btn .tiny-step { color: #fee2e2 !important; }
   </style>
 </head>
 <body>
@@ -670,12 +646,12 @@
       </div>
     </div>
 
-    <!-- 1. POČETNI EKRAN: NACRTANA ŠKOLICA KREDOM -->
+    <!-- 1. POČETNI EKRAN: ŠKOLICA ODOZDO PREMA GORE -->
     <section id="screen-start" class="screen active">
       <div class="card">
         <h1 class="chalk-title">ŠKOLICA</h1>
         <p class="chalk-subtitle">
-          Skakući kroz pitanja i otključavanje rečenica uz vremenske izazove. Regionalne i svjetske teme, filmovi, pjesme i brzi bodovi.
+          Skakući od dna prema vrhu kroz pitanja i otključavanje rečenica uz vremenske izazove.
         </p>
 
         <div style="text-align:center;">
@@ -685,46 +661,41 @@
         <div class="hopscotch-wrap">
           <div class="hopscotch-grid">
             <div class="hop-single">
+              <div class="chalk-cell" style="border-radius: 999px 999px 16px 16px;">
+                <span class="chalk-num">10</span>
+                <span class="chalk-label">Majstor Školice</span>
+              </div>
+            </div>
+            <div class="hop-row-pair">
+              <div class="chalk-cell"><span class="chalk-num">8</span><span class="chalk-label">Filmovi</span></div>
+              <div class="chalk-cell"><span class="chalk-num">9</span><span class="chalk-label">Glazba</span></div>
+            </div>
+            <div class="hop-single">
+              <div class="chalk-cell"><span class="chalk-num">7</span><span class="chalk-label">Pobjednik</span></div>
+            </div>
+            <div class="hop-row-pair">
+              <div class="chalk-cell"><span class="chalk-num">5</span><span class="chalk-label">Rečenice +5s</span></div>
+              <div class="chalk-cell"><span class="chalk-num">6</span><span class="chalk-label">Brzi bodovi</span></div>
+            </div>
+            <div class="hop-single">
+              <div class="chalk-cell"><span class="chalk-num">4</span><span class="chalk-label">Platina · 15s</span></div>
+            </div>
+            <div class="hop-row-pair">
+              <div class="chalk-cell"><span class="chalk-num">2</span><span class="chalk-label">Srebro · 30s</span></div>
+              <div class="chalk-cell"><span class="chalk-num">3</span><span class="chalk-label">Zlato · 20s</span></div>
+            </div>
+            <div class="hop-single">
               <button type="button" class="start-cell-btn" onclick="goScreen('screen-setup')">
                 <span class="tiny-step">POLJE 1</span>
                 START
               </button>
-            </div>
-
-            <div class="hop-row-pair">
-              <div class="chalk-cell">
-                <span class="chalk-num">2</span>
-                <span class="chalk-label">Srebro · 30s</span>
-              </div>
-              <div class="chalk-cell">
-                <span class="chalk-num">3</span>
-                <span class="chalk-label">Zlato · 20s</span>
-              </div>
-            </div>
-
-            <div class="hop-single">
-              <div class="chalk-cell">
-                <span class="chalk-num">4</span>
-                <span class="chalk-label">Platina · 15s</span>
-              </div>
-            </div>
-
-            <div class="hop-row-pair">
-              <div class="chalk-cell">
-                <span class="chalk-num">5</span>
-                <span class="chalk-label">Rečenice +5s</span>
-              </div>
-              <div class="chalk-cell">
-                <span class="chalk-num">6</span>
-                <span class="chalk-label">Pobjednik</span>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. IZBOR NAČINA IGRE, NADIMKA I RANGA -->
+    <!-- 2. POSTAVKE -->
     <section id="screen-setup" class="screen">
       <div class="card">
         <h2 class="section-heading">1. Odaberi način igre</h2>
@@ -758,28 +729,16 @@
 
         <h2 class="section-heading">3. Težina i vrijeme</h2>
         <div class="pill-group">
-          <button type="button" id="rank-srebro" class="pill-btn active" onclick="selectRank('srebro')">
-            🥈 Srebro<br><small>30s · Reč. 35s</small>
-          </button>
-          <button type="button" id="rank-zlato" class="pill-btn" onclick="selectRank('zlato')">
-            🥇 Zlato<br><small>20s · Reč. 25s</small>
-          </button>
-          <button type="button" id="rank-platina" class="pill-btn" onclick="selectRank('platina')">
-            💎 Platina<br><small>15s · Reč. 20s</small>
-          </button>
+          <button type="button" id="rank-srebro" class="pill-btn active" onclick="selectRank('srebro')">🥈 Srebro<br><small>30s · Reč. 35s</small></button>
+          <button type="button" id="rank-zlato" class="pill-btn" onclick="selectRank('zlato')">🥇 Zlato<br><small>20s · Reč. 25s</small></button>
+          <button type="button" id="rank-platina" class="pill-btn" onclick="selectRank('platina')">💎 Platina<br><small>15s · Reč. 20s</small></button>
         </div>
 
         <h2 class="section-heading">4. Vrsta runde</h2>
-        <div class="pill-group" style="grid-template-columns: repeat(3, 1fr);">
-          <button type="button" id="round-mix" class="pill-btn active" onclick="selectRoundType('mix')">
-            🎲 Miks runde
-          </button>
-          <button type="button" id="round-mcq" class="pill-btn" onclick="selectRoundType('mcq')">
-            ❓ Samo pitanja
-          </button>
-          <button type="button" id="round-sentence" class="pill-btn" onclick="selectRoundType('sentence')">
-            🔤 Otključaj rečenicu
-          </button>
+        <div class="pill-group">
+          <button type="button" id="round-mix" class="pill-btn active" onclick="selectRoundType('mix')">🎲 Miks runde</button>
+          <button type="button" id="round-mcq" class="pill-btn" onclick="selectRoundType('mcq')">❓ Samo pitanja</button>
+          <button type="button" id="round-sentence" class="pill-btn" onclick="selectRoundType('sentence')">🔤 Otključaj rečenicu</button>
         </div>
 
         <p id="setup-quota-info" class="muted" style="margin-top:6px;"></p>
@@ -793,42 +752,27 @@
       </div>
     </section>
 
-    <!-- 3. EKRAN IGRE -->
+    <!-- 3. IGRANJE -->
     <section id="screen-game" class="screen">
       <div class="card">
         <div class="hud">
-          <div class="hud-box">
-            <span class="hud-label">Na potezu</span>
-            <span id="hud-player" class="hud-val">—</span>
-          </div>
-          <div class="hud-box">
-            <span class="hud-label">Runda</span>
-            <span id="hud-round" class="hud-val">1/8</span>
-          </div>
-          <div class="hud-box">
-            <span class="hud-label">Vrijeme</span>
-            <span id="hud-timer" class="hud-val">30s</span>
-          </div>
-          <div class="hud-box">
-            <span class="hud-label">Bodovi</span>
-            <span id="hud-score" class="hud-val">0</span>
-          </div>
+          <div class="hud-box"><span class="hud-label">Na potezu</span><span id="hud-player" class="hud-val">—</span></div>
+          <div class="hud-box"><span class="hud-label">Runda</span><span id="hud-round" class="hud-val">1/8</span></div>
+          <div class="hud-box"><span class="hud-label">Vrijeme</span><span id="hud-timer" class="hud-val">30s</span></div>
+          <div class="hud-box"><span class="hud-label">Bodovi</span><span id="hud-score" class="hud-val">0</span></div>
         </div>
 
         <div id="game-content"></div>
-
         <div id="feedback-box" class="feedback-box"></div>
 
         <div style="display:flex; justify-content:space-between; gap:10px; margin-top:14px; flex-wrap:wrap;">
           <button type="button" class="btn" onclick="endGameEarly()">Završi i spremi</button>
-          <button type="button" id="btn-next" class="btn btn-primary" style="display:none;" onclick="nextTurn()">
-            Sljedeća runda →
-          </button>
+          <button type="button" id="btn-next" class="btn btn-primary" style="display:none;" onclick="nextTurn()">Sljedeća runda →</button>
         </div>
       </div>
     </section>
 
-    <!-- 4. EKRAN TABLICE PORETKA ("Tko vodi" — sedmični nivo) -->
+    <!-- 4. LJESTVICA -->
     <section id="screen-board" class="screen">
       <div class="card">
         <h2 class="section-heading">🏆 Tko vodi <span id="week-badge" class="badge" style="vertical-align:middle; margin-left:6px;"></span></h2>
@@ -842,34 +786,19 @@
       </div>
     </section>
 
-    <div class="footer-note">
-      Školica · <span id="pool-status"></span>
-    </div>
+    <div class="footer-note">Školica · <span id="pool-status"></span></div>
   </div>
 
   <script>
     const FUNNY_NICKS = [
-      "Kralj Kredom",
-      "Brzi Prsti",
-      "Štreber iz Zadnje Klupe",
-      "Zlatna Spužva",
-      "Majstor Velikog Odmora",
-      "Kafanski Sveznalica",
-      "Brža od Googlea",
-      "Profesor Pogađalo",
-      "Kredica Nindža",
-      "Genij bez Bilježnice",
-      "Munja u Školici",
-      "Kapetan Neponovljivi"
+      "Kralj Kredom", "Brzi Prsti", "Štreber iz Zadnje Klupe", "Zlatna Spužva",
+      "Majstor Velikog Odmora", "Kafanski Sveznalica", "Brža od Googlea",
+      "Profesor Pogađalo", "Kredica Nindža", "Genij bez Bilježnice", "Munja u Školici", "Kapetan Neponovljivi"
     ];
 
     const FUNNY_TEAMS = [
-      "Ekipa s Velikog Odmora",
-      "Zadnja Klupa",
-      "Kraljevi Kredom",
-      "Brzi Mozgovi",
-      "Školski Fantomi",
-      "Lovci na Platinu"
+      "Ekipa s Velikog Odmora", "Zadnja Klupa", "Kraljevi Kredom",
+      "Brzi Mozgovi", "Školski Fantomi", "Lovci na Platinu"
     ];
 
     const RANK_TIMES = {
@@ -904,19 +833,16 @@
       }
     }
 
-    function saveDailyQuotaState(state) {
-      const key = `skolica_daily_quota_${getDayKey()}`;
-      localStorage.setItem(key, JSON.stringify(state));
+    function saveDailyQuotaState(stateObj) {
+      localStorage.setItem(`skolica_daily_quota_${getDayKey()}`, JSON.stringify(stateObj));
     }
 
     function getFreeGamesLeftToday() {
-      const state = getDailyQuotaState();
-      return Math.max(0, DAILY_FREE_GAMES - (state.freeUsed || 0));
+      return Math.max(0, DAILY_FREE_GAMES - (getDailyQuotaState().freeUsed || 0));
     }
 
     function getPlayerBoardPoints(name) {
-      const board = loadBoard();
-      const found = board.find(item => item.name.toLowerCase() === String(name || "").trim().toLowerCase());
+      const found = loadBoard().find(item => item.name.toLowerCase() === String(name || "").trim().toLowerCase());
       return found ? found.score : 0;
     }
 
@@ -935,13 +861,11 @@
       const left = getFreeGamesLeftToday();
       const statusEl = document.getElementById("daily-quota-status");
       const setupEl = document.getElementById("setup-quota-info");
-
       if (statusEl) {
         statusEl.textContent = left > 0
           ? `Besplatne igre danas: ${left}/${DAILY_FREE_GAMES} · Dalje: ${EXTRA_GAME_COST} bodova`
           : `Sve 3 besplatne igre iskorištene · Nova igra košta ${EXTRA_GAME_COST} bodova`;
       }
-
       if (setupEl) {
         const activeName = state.playMode === "team"
           ? (document.getElementById("input-team-1").value.trim() || FUNNY_TEAMS[0])
@@ -949,7 +873,7 @@
         const pts = getPlayerBoardPoints(activeName);
         setupEl.textContent = left > 0
           ? `Preostalo besplatnih igara danas: ${left}/${DAILY_FREE_GAMES}.`
-          : `Potrošene su sve 3 dnevne igre. Za pokretanje potrebno je ${EXTRA_GAME_COST} bodova (trenutno na tablici za "${activeName}": ${pts} bodova).`;
+          : `Potrošene su sve 3 dnevne igre. Za pokretanje potrebno je ${EXTRA_GAME_COST} bodova (trenutno za "${activeName}": ${pts} bodova).`;
       }
     }
 
@@ -962,14 +886,12 @@
         updateQuotaLabels();
         return { allowed: true, message: `Besplatna igra (${DAILY_FREE_GAMES - qState.freeUsed}/${DAILY_FREE_GAMES} preostalo danas)` };
       }
-
       const currentPts = getPlayerBoardPoints(payerName);
       if (currentPts >= EXTRA_GAME_COST) {
         deductPlayerBoardPoints(payerName, EXTRA_GAME_COST);
         updateQuotaLabels();
         return { allowed: true, message: `Plaćeno ${EXTRA_GAME_COST} bodova za dodatnu igru` };
       }
-
       updateQuotaLabels();
       return {
         allowed: false,
@@ -978,6 +900,7 @@
     }
 
     const QUESTIONS_POOL = [
+
 
       { id: "q1", area: "Film", q: "Koji je redatelj režirao kultni film 'Pulp Fiction' (Pakleni šund)?", opts: ["Quentin Tarantino", "Martin Scorsese", "Christopher Nolan", "Ridley Scott"], ans: 0 },
       { id: "q2", area: "Glazba", q: "Koja je britanska grupa izdala legendarni album 'The Dark Side of the Moon'?", opts: ["Pink Floyd", "Queen", "Led Zeppelin", "The Rolling Stones"], ans: 0 },
