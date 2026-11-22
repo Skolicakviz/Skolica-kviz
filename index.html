@@ -5,23 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Školica — Kviz znanja i rečenica</title>
   <meta name="description" content="Školica kviz — regionalna i svjetska pitanja, filmovi, pjesme, izvođači i otključavanje rečenica uz vremenske izazove." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-board: #14281d;
-      --bg-board-2: #1b3627;
-      --chalk: #f5f2e6;
-      --chalk-soft: rgba(245, 242, 230, 0.78);
-      --chalk-line: rgba(245, 242, 230, 0.45);
-      --start-red: #e02424;
-      --start-red-dark: #b91c1c;
-      --accent-gold: #f59e0b;
-      --accent-teal: #2dd4bf;
-      --accent-green: #22c55e;
-      --accent-rose: #fb7185;
-      --card-bg: rgba(12, 24, 18, 0.78);
-      --card-border: rgba(245, 242, 230, 0.22);
-      --radius: 16px;
-      --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      --bg-board: #f4f1ea;
+      --bg-board-2: #ebe5d8;
+      --chalk: #22262c;
+      --chalk-soft: rgba(34, 38, 44, 0.75);
+      --chalk-line: rgba(34, 38, 44, 0.36);
+      --start-red: #dc2626;
+      --start-red-dark: #991b1b;
+      --accent-gold: #d97706;
+      --accent-teal: #0f766e;
+      --accent-green: #16a34a;
+      --accent-rose: #e11d48;
+      --card-bg: #fcfbf7;
+      --card-border: rgba(34, 38, 44, 0.25);
+      --radius: 18px;
+      --shadow: 0 10px 24px rgba(34, 38, 44, 0.08);
     }
 
     * {
@@ -32,12 +35,15 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: var(--chalk);
-      background:
-        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.05), transparent 40%),
-        radial-gradient(circle at 80% 85%, rgba(255, 255, 255, 0.04), transparent 45%),
+      background-color: var(--bg-board);
+      background-image:
+        radial-gradient(rgba(34, 38, 44, 0.06) 1px, transparent 0),
+        radial-gradient(rgba(34, 38, 44, 0.04) 1px, transparent 0),
         linear-gradient(160deg, var(--bg-board), var(--bg-board-2));
+      background-size: 24px 24px, 24px 24px, 100% 100%;
+      background-position: 0 0, 12px 12px, 0 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -59,9 +65,10 @@
     }
 
     .brand-mini {
-      font-weight: 800;
+      font-family: "Caveat", cursive;
+      font-weight: 700;
       letter-spacing: 0.5px;
-      font-size: 1.05rem;
+      font-size: 1.55rem;
       color: var(--chalk);
       cursor: pointer;
       display: inline-flex;
@@ -76,46 +83,47 @@
     }
 
     .btn {
-      border: 2px solid var(--chalk-line);
-      background: rgba(255, 255, 255, 0.08);
+      border: 2px dashed var(--chalk-line);
+      background: #ffffff;
       color: var(--chalk);
       padding: 9px 14px;
-      border-radius: 12px;
+      border-radius: 14px 8px 15px 9px / 9px 15px 8px 14px;
       font-weight: 700;
       font-size: 0.92rem;
       cursor: pointer;
+      box-shadow: 0 3px 0 rgba(34, 38, 44, 0.12);
       transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
     }
 
     .btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: var(--chalk);
+      background: #fffdf8;
+      border-color: var(--accent-teal);
     }
 
     .btn:active:not(:disabled) {
-      transform: scale(0.97);
+      transform: translateY(1px);
     }
 
     .btn:disabled {
-      opacity: 0.45;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
     .btn-primary {
-      background: var(--accent-green);
+      background: rgba(22, 163, 74, 0.15);
       border-color: var(--accent-green);
-      color: #062111;
+      color: #14532d;
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: #16a34a;
-      border-color: #16a34a;
+      background: rgba(22, 163, 74, 0.24);
+      border-color: var(--accent-green);
     }
 
     .btn-gold {
-      background: var(--accent-gold);
+      background: rgba(217, 119, 6, 0.15);
       border-color: var(--accent-gold);
-      color: #1f1400;
+      color: #78350f;
     }
 
     .screen {
@@ -134,8 +142,8 @@
 
     .card {
       background: var(--card-bg);
-      border: 2px dashed var(--chalk-line);
-      border-radius: var(--radius);
+      border: 2.5px dashed var(--chalk-line);
+      border-radius: 24px 12px 22px 14px / 14px 22px 12px 24px;
       padding: 20px 16px;
       box-shadow: var(--shadow);
       margin-bottom: 14px;
@@ -151,12 +159,14 @@
     }
 
     .chalk-title {
-      font-size: clamp(2rem, 6vw, 2.8rem);
-      font-weight: 900;
-      margin: 0 0 4px;
+      font-family: "Caveat", cursive;
+      font-size: clamp(2.6rem, 7vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1;
+      margin: 0 0 6px;
       text-align: center;
       letter-spacing: 1px;
-      text-shadow: 0 3px 0 rgba(0,0,0,0.35);
+      color: var(--chalk);
     }
 
     .chalk-subtitle {
@@ -166,6 +176,18 @@
       font-size: 1rem;
       line-height: 1.45;
       max-width: 540px;
+    }
+
+    .quota-pill {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 2px dashed var(--chalk-line);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--chalk);
     }
 
     .hopscotch-grid {
@@ -192,44 +214,47 @@
     }
 
     .chalk-cell {
-      min-height: 64px;
-      border: 3px dashed rgba(245, 242, 230, 0.75);
-      border-radius: 14px;
+      min-height: 66px;
+      border: 2.5px dashed rgba(34, 38, 44, 0.55);
+      border-radius: 16px 8px 18px 10px / 10px 18px 8px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       font-weight: 800;
       color: var(--chalk);
-      background: rgba(255, 255, 255, 0.03);
+      background: #ffffff;
       position: relative;
       user-select: none;
     }
 
     .chalk-num {
       font-size: 0.78rem;
-      opacity: 0.75;
+      opacity: 0.72;
       line-height: 1;
     }
 
     .chalk-label {
-      font-size: 0.95rem;
+      font-family: "Caveat", cursive;
+      font-size: 1.3rem;
       margin-top: 2px;
     }
 
     .start-cell-btn {
       width: 100%;
-      min-height: 78px;
-      border: 3px solid #fca5a5;
-      border-radius: 18px;
-      background: linear-gradient(180deg, var(--start-red), var(--start-red-dark));
-      color: #ffffff;
-      font-size: 1.65rem;
-      font-weight: 900;
+      min-height: 86px;
+      border: 3px dashed var(--start-red);
+      border-radius: 20px 10px 22px 12px / 12px 22px 10px 20px;
+      background: rgba(220, 38, 38, 0.1);
+      color: var(--start-red);
+      font-family: "Caveat", cursive;
+      font-size: clamp(2.6rem, 8vw, 3.5rem);
+      font-weight: 700;
+      line-height: 0.95;
       letter-spacing: 2px;
       cursor: pointer;
-      box-shadow: 0 8px 22px rgba(224, 36, 36, 0.45);
-      transition: transform 0.12s ease, box-shadow 0.15s ease;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.16);
+      transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -237,15 +262,19 @@
     }
 
     .start-cell-btn span.tiny-step {
+      font-family: "Plus Jakarta Sans", sans-serif;
       font-size: 0.72rem;
       letter-spacing: 1px;
-      opacity: 0.9;
-      font-weight: 700;
+      opacity: 0.85;
+      font-weight: 800;
+      color: var(--start-red-dark);
+      margin-bottom: 2px;
     }
 
     .start-cell-btn:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 11px 26px rgba(224, 36, 36, 0.6);
+      background: rgba(220, 38, 38, 0.17);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 9px 22px rgba(220, 38, 38, 0.22);
     }
 
     .start-cell-btn:active {
@@ -257,6 +286,7 @@
       margin: 0 0 12px;
       font-size: 1.25rem;
       font-weight: 800;
+      color: var(--chalk);
     }
 
     .mode-choices {
@@ -267,9 +297,9 @@
     }
 
     .choice-card {
-      border: 2px solid var(--chalk-line);
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 14px;
+      border: 2px dashed var(--chalk-line);
+      background: #ffffff;
+      border-radius: 16px 8px 18px 10px / 10px 18px 8px 16px;
       padding: 14px;
       text-align: left;
       color: var(--chalk);
@@ -278,9 +308,10 @@
     }
 
     .choice-card.selected {
+      border-style: solid;
       border-color: var(--accent-teal);
-      background: rgba(45, 212, 191, 0.14);
-      box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.25);
+      background: rgba(15, 118, 110, 0.1);
+      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2);
     }
 
     .choice-card strong {
@@ -308,8 +339,8 @@
       min-width: 180px;
       padding: 11px 14px;
       border-radius: 12px;
-      border: 2px solid var(--chalk-line);
-      background: rgba(0, 0, 0, 0.28);
+      border: 2px dashed var(--chalk-line);
+      background: #ffffff;
       color: var(--chalk);
       font-size: 1rem;
       font-weight: 600;
@@ -317,6 +348,7 @@
 
     .nick-input:focus {
       outline: none;
+      border-style: solid;
       border-color: var(--accent-teal);
     }
 
@@ -330,8 +362,8 @@
     .pill-btn {
       padding: 10px 8px;
       border-radius: 12px;
-      border: 2px solid var(--chalk-line);
-      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed var(--chalk-line);
+      background: #ffffff;
       color: var(--chalk);
       font-weight: 700;
       font-size: 0.88rem;
@@ -340,12 +372,13 @@
     }
 
     .pill-btn.active {
+      border-style: solid;
       border-color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.2);
-      color: #fde68a;
+      background: rgba(217, 119, 6, 0.15);
+      color: #78350f;
     }
 
-    /* Igra */
+    /* Igra — svijetla kreda površina */
     .hud {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -354,8 +387,8 @@
     }
 
     .hud-box {
-      background: rgba(0, 0, 0, 0.28);
-      border: 1.5px solid var(--chalk-line);
+      background: #ffffff;
+      border: 2px dashed var(--chalk-line);
       border-radius: 12px;
       padding: 8px 10px;
       text-align: center;
@@ -374,6 +407,7 @@
       font-weight: 900;
       margin-top: 2px;
       display: block;
+      color: var(--chalk);
     }
 
     .timer-urgent {
@@ -395,8 +429,9 @@
       border-radius: 999px;
       font-size: 0.78rem;
       font-weight: 800;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid var(--chalk-line);
+      background: #ffffff;
+      color: var(--chalk);
+      border: 1.5px dashed var(--chalk-line);
     }
 
     .q-text {
@@ -404,6 +439,7 @@
       font-weight: 800;
       line-height: 1.4;
       margin: 8px 0 16px;
+      color: var(--chalk);
     }
 
     .options-grid {
@@ -421,39 +457,43 @@
     .opt-btn {
       padding: 14px 14px;
       border-radius: 14px;
-      border: 2px solid var(--chalk-line);
-      background: rgba(255, 255, 255, 0.06);
+      border: 2px dashed var(--chalk-line);
+      background: #ffffff;
       color: var(--chalk);
       font-size: 1rem;
       font-weight: 700;
       text-align: left;
       cursor: pointer;
+      box-shadow: 0 2px 0 rgba(34, 38, 44, 0.08);
       transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
     }
 
     .opt-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: var(--chalk);
+      background: #fffdf8;
+      border-style: solid;
+      border-color: var(--accent-teal);
     }
 
     .opt-btn.correct {
-      background: rgba(34, 197, 94, 0.28);
+      background: rgba(22, 163, 74, 0.2);
+      border-style: solid;
       border-color: var(--accent-green);
-      color: #dcfce7;
+      color: #14532d;
     }
 
     .opt-btn.wrong {
-      background: rgba(251, 113, 133, 0.28);
+      background: rgba(225, 29, 72, 0.16);
+      border-style: solid;
       border-color: var(--accent-rose);
-      color: #ffe4e6;
+      color: #881337;
     }
 
-    /* Otključaj rečenicu — pregledno na mobitelu, bez lomljenja riječi */
+    /* Otključaj rečenicu */
     .clue-banner {
       display: inline-block;
-      background: rgba(45, 212, 191, 0.18);
-      border: 1.5px solid var(--accent-teal);
-      color: #99f6e4;
+      background: rgba(15, 118, 110, 0.14);
+      border: 1.5px dashed var(--accent-teal);
+      color: #115e59;
       padding: 5px 12px;
       border-radius: 999px;
       font-size: 0.85rem;
@@ -467,9 +507,9 @@
       justify-content: center;
       gap: 12px 16px;
       padding: 14px 8px 18px;
-      background: rgba(0, 0, 0, 0.24);
+      background: #ffffff;
       border-radius: 14px;
-      border: 1.5px solid var(--chalk-line);
+      border: 2px dashed var(--chalk-line);
       margin-bottom: 14px;
     }
 
@@ -484,14 +524,14 @@
       width: 28px;
       height: 36px;
       border-bottom: 3px solid var(--chalk);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(34, 38, 44, 0.05);
       border-radius: 6px 6px 2px 2px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
       font-size: 1.05rem;
-      color: #fde68a;
+      color: var(--accent-gold);
     }
 
     .letter-tile.punct {
@@ -519,8 +559,8 @@
     .key-btn {
       min-height: 48px;
       border-radius: 11px;
-      border: 2px solid var(--chalk-line);
-      background: rgba(255, 255, 255, 0.1);
+      border: 2px dashed var(--chalk-line);
+      background: #ffffff;
       color: var(--chalk);
       font-size: 1.08rem;
       font-weight: 800;
@@ -529,17 +569,21 @@
     }
 
     .key-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.22);
+      background: #fffdf8;
+      border-style: solid;
+      border-color: var(--accent-teal);
     }
 
     .key-btn.hit {
-      background: rgba(34, 197, 94, 0.35);
+      background: rgba(22, 163, 74, 0.22);
+      border-style: solid;
       border-color: var(--accent-green);
-      color: #dcfce7;
+      color: #14532d;
     }
 
     .key-btn.miss {
-      background: rgba(251, 113, 133, 0.25);
+      background: rgba(225, 29, 72, 0.14);
+      border-style: solid;
       border-color: var(--accent-rose);
       opacity: 0.55;
     }
@@ -548,8 +592,10 @@
       margin-top: 12px;
       padding: 12px 14px;
       border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
+      background: #ffffff;
+      border: 1.5px dashed var(--chalk-line);
       border-left: 4px solid var(--accent-gold);
+      color: var(--chalk);
       font-size: 0.95rem;
       line-height: 1.4;
       display: none;
@@ -561,13 +607,13 @@
 
     /* Tablica tko vodi */
     .summary-banner {
-      background: rgba(45, 212, 191, 0.14);
-      border: 1.5px solid var(--accent-teal);
+      background: rgba(15, 118, 110, 0.14);
+      border: 1.5px dashed var(--accent-teal);
       border-radius: 12px;
       padding: 12px 14px;
       margin-bottom: 12px;
       font-weight: 700;
-      color: #ccfbf1;
+      color: #115e59;
       display: none;
     }
 
@@ -590,8 +636,9 @@
       align-items: center;
       padding: 11px 14px;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1.5px solid var(--chalk-line);
+      background: #ffffff;
+      border: 2px dashed var(--chalk-line);
+      color: var(--chalk);
       font-weight: 800;
     }
 
@@ -630,6 +677,10 @@
         <p class="chalk-subtitle">
           Skakući kroz pitanja i otključavanje rečenica uz vremenske izazove. Regionalne i svjetske teme, filmovi, pjesme i brzi bodovi.
         </p>
+
+        <div style="text-align:center;">
+          <div id="daily-quota-status" class="quota-pill">3 besplatne igre danas · Dodatna igra: 500 bodova</div>
+        </div>
 
         <div class="hopscotch-wrap">
           <div class="hopscotch-grid">
@@ -731,9 +782,11 @@
           </button>
         </div>
 
+        <p id="setup-quota-info" class="muted" style="margin-top:6px;"></p>
+
         <div style="display:flex; gap:10px; justify-content:space-between; margin-top:16px; flex-wrap:wrap;">
           <button type="button" class="btn" onclick="goScreen('screen-start')">← Natrag</button>
-          <button type="button" class="btn btn-primary" style="padding:12px 22px; font-size:1.05rem;" onclick="startGame()">
+          <button type="button" id="btn-start-game" class="btn btn-primary" style="padding:12px 22px; font-size:1.05rem;" onclick="startGame()">
             Kreni u igru →
           </button>
         </div>
@@ -825,8 +878,107 @@
       platina:{ label: "Platina",base: 15, sentence: 20, mult: 1.6 }
     };
 
-    // Očišćena početna baza pitanja (sređen tekst i velika slova; ostale blokove dodajemo u sljedećim koracima)
+    const DAILY_FREE_GAMES = 3;
+    const EXTRA_GAME_COST = 500;
+
+    function getDayKey() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function getDailyQuotaState() {
+      const key = `skolica_daily_quota_${getDayKey()}`;
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) {
+          const fresh = { freeUsed: 0 };
+          localStorage.setItem(key, JSON.stringify(fresh));
+          return fresh;
+        }
+        return JSON.parse(raw);
+      } catch {
+        return { freeUsed: 0 };
+      }
+    }
+
+    function saveDailyQuotaState(state) {
+      const key = `skolica_daily_quota_${getDayKey()}`;
+      localStorage.setItem(key, JSON.stringify(state));
+    }
+
+    function getFreeGamesLeftToday() {
+      const state = getDailyQuotaState();
+      return Math.max(0, DAILY_FREE_GAMES - (state.freeUsed || 0));
+    }
+
+    function getPlayerBoardPoints(name) {
+      const board = loadBoard();
+      const found = board.find(item => item.name.toLowerCase() === String(name || "").trim().toLowerCase());
+      return found ? found.score : 0;
+    }
+
+    function deductPlayerBoardPoints(name, amount) {
+      const cleanName = String(name || "").trim() || FUNNY_NICKS[0];
+      const board = loadBoard();
+      const idx = board.findIndex(item => item.name.toLowerCase() === cleanName.toLowerCase());
+      if (idx >= 0) {
+        board[idx].score = Math.max(0, (board[idx].score || 0) - amount);
+        board.sort((a, b) => b.score - a.score);
+        saveBoard(board);
+      }
+    }
+
+    function updateQuotaLabels() {
+      const left = getFreeGamesLeftToday();
+      const statusEl = document.getElementById("daily-quota-status");
+      const setupEl = document.getElementById("setup-quota-info");
+
+      if (statusEl) {
+        statusEl.textContent = left > 0
+          ? `Besplatne igre danas: ${left}/${DAILY_FREE_GAMES} · Dalje: ${EXTRA_GAME_COST} bodova`
+          : `Sve 3 besplatne igre iskorištene · Nova igra košta ${EXTRA_GAME_COST} bodova`;
+      }
+
+      if (setupEl) {
+        const activeName = state.playMode === "team"
+          ? (document.getElementById("input-team-1").value.trim() || FUNNY_TEAMS[0])
+          : (document.getElementById("input-nick-1").value.trim() || FUNNY_NICKS[0]);
+        const pts = getPlayerBoardPoints(activeName);
+        setupEl.textContent = left > 0
+          ? `Preostalo besplatnih igara danas: ${left}/${DAILY_FREE_GAMES}.`
+          : `Potrošene su sve 3 dnevne igre. Za pokretanje potrebno je ${EXTRA_GAME_COST} bodova (trenutno na tablici za "${activeName}": ${pts} bodova).`;
+      }
+    }
+
+    function consumeGameQuotaOrPay(payerName) {
+      const freeLeft = getFreeGamesLeftToday();
+      if (freeLeft > 0) {
+        const qState = getDailyQuotaState();
+        qState.freeUsed = (qState.freeUsed || 0) + 1;
+        saveDailyQuotaState(qState);
+        updateQuotaLabels();
+        return { allowed: true, message: `Besplatna igra (${DAILY_FREE_GAMES - qState.freeUsed}/${DAILY_FREE_GAMES} preostalo danas)` };
+      }
+
+      const currentPts = getPlayerBoardPoints(payerName);
+      if (currentPts >= EXTRA_GAME_COST) {
+        deductPlayerBoardPoints(payerName, EXTRA_GAME_COST);
+        updateQuotaLabels();
+        return { allowed: true, message: `Plaćeno ${EXTRA_GAME_COST} bodova za dodatnu igru` };
+      }
+
+      updateQuotaLabels();
+      return {
+        allowed: false,
+        message: `Potrošila si sve 3 besplatne igre danas. Za novu igru trebaš ${EXTRA_GAME_COST} bodova (trenutno ${currentPts}).`
+      };
+    }
+
     const QUESTIONS_POOL = [
+
       { id: "q1", area: "Film", q: "Koji je redatelj režirao kultni film 'Pulp Fiction' (Pakleni šund)?", opts: ["Quentin Tarantino", "Martin Scorsese", "Christopher Nolan", "Ridley Scott"], ans: 0 },
       { id: "q2", area: "Glazba", q: "Koja je britanska grupa izdala legendarni album 'The Dark Side of the Moon'?", opts: ["Pink Floyd", "Queen", "Led Zeppelin", "The Rolling Stones"], ans: 0 },
       { id: "q3", area: "Izvođači", q: "Tko izvodi globalni hit 'Blinding Lights'?", opts: ["The Weeknd", "Bruno Mars", "Drake", "Post Malone"], ans: 0 },
