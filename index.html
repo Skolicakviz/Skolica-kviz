@@ -2757,11 +2757,12 @@
     if (typeof showFeedback === "function") {
       showFeedback("Rečenica pogođena!");
     }
-    const nextBtn = document.getElementById("btn-next");
+        const nextBtn = document.getElementById("btn-next");
     if (nextBtn) {
-      nextBtn.style.display = "";
+      nextBtn.style.setProperty("display", "inline-block", "important");
       nextBtn.disabled = false;
     }
+
 
   } else {
     if (inputEl) {
