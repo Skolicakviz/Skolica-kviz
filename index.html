@@ -1918,6 +1918,7 @@
       { id: "s11", clue: "Poslovica", text: "TKO ČEKA TAJ DOČEKA" },
       { id: "s12", clue: "Film", text: "KUM" }
 
+      
       ];
 
     const CRO_ALPHABET = [
@@ -1930,80 +1931,80 @@
         area: "Zastave svijeta",
         q: "Koja država ima ovu prepoznatljivu zastavu sa sunčevim krugom?",
         image: "https://flagcdn.com/w640/jp.png",
-        options: ["Japan", "Južna Koreja", "Tajvan", "Bangladeš"],
-        answer: 0,
+        opts: ["Japan", "Južna Koreja", "Tajvan", "Bangladeš"],
+        ans: 0,
         jesteLiZnali: "Japanska zastava naziva se Hinomaru ('sunčev krug'), a bijela podloga simbolizira čistoću i iskrenost."
       },
       {
         area: "Zastave svijeta",
         q: "Koji je ovo državni stijeg sa zeleno-žuto-plavim motivom i zvijezdama?",
         image: "https://flagcdn.com/w640/br.png",
-        options: ["Brazil", "Kolumbija", "Argentina", "Ekvador"],
-        answer: 0,
+        opts: ["Brazil", "Kolumbija", "Argentina", "Ekvador"],
+        ans: 0,
         jesteLiZnali: "Zvijezde na brazilskoj zastavi raspoređene su prema izgledu noćnog neba iznad Rio de Janeira ujutro 15. studenoga 1889."
       },
       {
         area: "Zastave svijeta",
         q: "Koja država ima ovaj nordijski križ?",
         image: "https://flagcdn.com/w640/no.png",
-        options: ["Norveška", "Švedska", "Danska", "Finska"],
-        answer: 0,
+        opts: ["Norveška", "Švedska", "Danska", "Finska"],
+        ans: 0,
         jesteLiZnali: "Norveška zastava kombinira crvenu i bijelu (poput danske) s plavim križem (poput švedske i finske)."
       },
       {
         area: "Zastave svijeta",
         q: "Čija je ovo zastava?",
         image: "https://flagcdn.com/w640/ca.png",
-        options: ["Kanada", "Peru", "Švicarska", "Austrija"],
-        answer: 0,
+        opts: ["Kanada", "Peru", "Švicarska", "Austrija"],
+        ans: 0,
         jesteLiZnali: "Kanadska zastava sa stiliziranim javorovim listom službeno je usvojena 1965. godine."
       },
       {
         area: "Zastave svijeta",
         q: "Kojoj državi pripada ova zastava?",
         image: "https://flagcdn.com/w640/ma.png",
-        options: ["Maroko", "Tunis", "Alžir", "Jordan"],
-        answer: 0,
+        opts: ["Maroko", "Tunis", "Alžir", "Jordan"],
+        ans: 0,
         jesteLiZnali: "Zelena pentagramska zvijezda na crvenoj podlozi predstavlja Salomonov pečat i pet stupova islama."
       },
       {
         area: "Zastave svijeta",
         q: "Koja otočna država na sjeveru Europe ima ovu zastavu?",
         image: "https://flagcdn.com/w640/is.png",
-        options: ["Island", "Farski otoci", "Norveška", "Škotska"],
-        answer: 0,
+        opts: ["Island", "Farski otoci", "Norveška", "Škotska"],
+        ans: 0,
         jesteLiZnali: "Plava boja na islandskoj zastavi simbolizira more i nebo, bijela led i snijeg, a crvena vulkansku vatru."
       },
       {
         area: "Gradovi i znamenitosti",
         q: "U kojem se gradu nalazi ova znamenitost?",
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/640px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg",
-        options: ["Pariz", "Lyon", "Marseille", "Bruxelles"],
-        answer: 0,
+        opts: ["Pariz", "Lyon", "Marseille", "Bruxelles"],
+        ans: 0,
         jesteLiZnali: "Eiffelov toranj ljeti može narasti i do 15 centimetara zbog toplinskog širenja željeza."
       },
       {
         area: "Gradovi i znamenitosti",
         q: "Koji je ovo grad poznat po kanalima i mostovima?",
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Grand_Canal_Venice.jpg/640px-Grand_Canal_Venice.jpg",
-        options: ["Venecija", "Firenca", "Verona", "Ravenna"],
-        answer: 0,
+        opts: ["Venecija", "Firenca", "Verona", "Ravenna"],
+        ans: 0,
         jesteLiZnali: "Povijesna jezgra Venecije izgrađena je na više od stotinu manjih otoka u venecijanskoj laguni."
       },
       {
         area: "Instrumenti",
         q: "Koji gudački instrument je prikazan na slici?",
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Violin_VL100.png/480px-Violin_VL100.png",
-        options: ["Violina", "Viola", "Kontrabas", "Mandolina"],
-        answer: 0,
+        opts: ["Violina", "Viola", "Kontrabas", "Mandolina"],
+        ans: 0,
         jesteLiZnali: "Violina ima četiri žice najčešće ugođene na G3, D4, A4 i E5, u intervalima čistih kvinti."
       },
       {
         area: "Alati",
         q: "Koji je točan naziv ovog alata?",
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Claw-hammer.jpg/640px-Claw-hammer.jpg",
-        options: ["Kandžasti čekić", "Macola", "Dlijeto", "Škripac"],
-        answer: 0,
+        opts: ["Kandžasti čekić", "Macola", "Dlijeto", "Škripac"],
+        ans: 0,
         jesteLiZnali: "Zakrivljeni rascjep na stražnjoj strani glave čekića služi kao poluga za čupanje čavala."
       }
     ];
@@ -2041,6 +2042,7 @@
     function extractRawOptions(item) {
       if (!item || typeof item !== "object") return [];
       const candidates = [
+        item.opts,
         item.options,
         item.choices,
         item.answers,
@@ -2058,7 +2060,7 @@
 
     function resolveAnswerIndex(item, opts) {
       if (!Array.isArray(opts) || !opts.length) return 0;
-      const rawAns = item.answer ?? item.correct ?? item.correctIndex ?? item.tocan ?? item.točan ?? item.right;
+      const rawAns = item.ans ?? item.answer ?? item.correct ?? item.correctIndex ?? item.tocan ?? item.točan ?? item.right;
 
       if (typeof rawAns === "number" && rawAns >= 0 && rawAns < opts.length) {
         return rawAns;
@@ -2077,60 +2079,13 @@
       return 0;
     }
 
-    function buildFallbackOptionsForItem(item) {
-      const directCorrect = typeof item.correctText === "string"
-        ? item.correctText
-        : typeof item.tocanOdgovor === "string"
-          ? item.tocanOdgovor
-          : typeof item.answer === "string" && isNaN(Number(item.answer))
-            ? item.answer
-            : null;
-
-      const sameAreaPool = QUESTIONS_POOL.filter(q =>
-        q !== item &&
-        q.type !== "sentence" &&
-        (q.area || q.category) === (item.area || item.category)
-      );
-      const generalPool = QUESTIONS_POOL.filter(q => q !== item && q.type !== "sentence");
-      const sourcePool = sameAreaPool.length >= 3 ? sameAreaPool : generalPool;
-
-      const distractors = [];
-      for (const cand of shuffleArray(sourcePool)) {
-        const candOpts = extractRawOptions(cand);
-        if (candOpts.length) {
-          const cIdx = resolveAnswerIndex(cand, candOpts);
-          const pickText = candOpts[cIdx];
-          if (pickText && pickText !== directCorrect && !distractors.includes(pickText)) {
-            distractors.push(pickText);
-          }
-        }
-        if (distractors.length >= 3) break;
-      }
-
-      const fallbackCorrect = directCorrect || distractors.shift() || "Točan odgovor";
-      while (distractors.length < 3) {
-        distractors.push(`Opcija ${distractors.length + 1}`);
-      }
-
-      return {
-        options: [fallbackCorrect, ...distractors.slice(0, 3)],
-        answer: 0
-      };
-    }
-
     function normalizeMcqItem(item) {
       if (!item || typeof item !== "object") return item;
-      let opts = extractRawOptions(item);
-      let ansIdx = 0;
-
-      if (opts.length >= 2) {
-        ansIdx = resolveAnswerIndex(item, opts);
-      } else {
-        const built = buildFallbackOptionsForItem(item);
-        opts = built.options;
-        ansIdx = built.answer;
+      const opts = extractRawOptions(item);
+      if (opts.length < 2) {
+        return { ...item, options: [], answer: 0 };
       }
-
+      const ansIdx = resolveAnswerIndex(item, opts);
       const correctOptionText = opts[ansIdx];
       const indexedOptions = opts.map((text, idx) => ({ text, idx }));
       const shuffled = shuffleArray(indexedOptions);
@@ -2219,17 +2174,30 @@
       if (wb) wb.textContent = getWeekKey();
     }
 
-    function enforceSoloOnlyUi() {
+    function hideModeSelectionSection() {
       state.playMode = "solo";
 
       const teamEl = document.getElementById("mode-team");
       if (teamEl) teamEl.style.display = "none";
 
       const soloEl = document.getElementById("mode-solo");
-      if (soloEl) {
-        soloEl.classList.add("selected");
-        soloEl.style.flex = "1 1 100%";
+      if (soloEl) soloEl.style.display = "none";
+
+      const modeSection =
+        soloEl?.closest("section, .setup-section, .card, .box, .block, div[id*='mode'], div[class*='mode']") ||
+        document.querySelector("[data-section='mode']");
+      if (modeSection && !modeSection.contains(document.getElementById("input-nick-1"))) {
+        modeSection.style.display = "none";
       }
+
+      document.querySelectorAll("h1, h2, h3, h4, label, p, div").forEach(el => {
+        if (el.children.length === 0) {
+          const txt = (el.textContent || "").trim();
+          if (/^(1\.\s*)?odaberi na[cč]in igre$/i.test(txt)) {
+            el.style.display = "none";
+          }
+        }
+      });
 
       const teamBox = document.getElementById("team-nick-box");
       if (teamBox) teamBox.style.display = "none";
@@ -2247,13 +2215,13 @@
       clearTimer();
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(screenId)?.classList.add("active");
-      enforceSoloOnlyUi();
+      hideModeSelectionSection();
       updateQuotaLabels();
       updatePoolStatus();
     }
 
     function selectPlayMode(mode) {
-      enforceSoloOnlyUi();
+      hideModeSelectionSection();
       updateQuotaLabels();
     }
 
@@ -2368,7 +2336,7 @@
     }
 
     function startGame() {
-      enforceSoloOnlyUi();
+      hideModeSelectionSection();
       const nickInput = document.getElementById("input-nick-1");
       const n1 = (nickInput?.value || "").trim() || FUNNY_NICKS[0];
       if (nickInput && !nickInput.value.trim()) nickInput.value = n1;
@@ -2807,7 +2775,7 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      enforceSoloOnlyUi();
+      hideModeSelectionSection();
       updateQuotaLabels();
       updatePoolStatus();
     });
@@ -2815,9 +2783,3 @@
 </body>
 </html>
 
-        
-        
-
-      
-
-         
