@@ -1917,8 +1917,8 @@
       { id: "s10", clue: "Izreka", text: "ZNANJE JE MOĆ" },
       { id: "s11", clue: "Poslovica", text: "TKO ČEKA TAJ DOČEKA" },
       { id: "s12", clue: "Film", text: "KUM" }
- 
-        ];
+
+      ];
 
     const CRO_ALPHABET = [
       "A","B","C","Č","Ć","D","DŽ","Đ","E","F","G","H","I","J","K","L","LJ",
@@ -2038,15 +2038,104 @@
       return copy;
     }
 
-    function prepareShuffledOptions(item) {
-      if (!item || !Array.isArray(item.options) || item.options.length < 2) {
-        return item;
+    function extractRawOptions(item) {
+      if (!item || typeof item !== "object") return [];
+      const candidates = [
+        item.options,
+        item.choices,
+        item.answers,
+        item.opcije,
+        item.ponudjeni,
+        item.ponuđeni
+      ];
+      for (const c of candidates) {
+        if (Array.isArray(c) && c.length >= 2) {
+          return c.map(v => typeof v === "object" && v !== null ? (v.text ?? v.label ?? v.option ?? String(v)) : String(v));
+        }
       }
-      const originalAnswerIdx = typeof item.answer === "number" ? item.answer : 0;
-      const correctOptionText = item.options[originalAnswerIdx];
-      const indexedOptions = item.options.map((text, idx) => ({ text, idx }));
+      return [];
+    }
+
+    function resolveAnswerIndex(item, opts) {
+      if (!Array.isArray(opts) || !opts.length) return 0;
+      const rawAns = item.answer ?? item.correct ?? item.correctIndex ?? item.tocan ?? item.točan ?? item.right;
+
+      if (typeof rawAns === "number" && rawAns >= 0 && rawAns < opts.length) {
+        return rawAns;
+      }
+      if (typeof rawAns === "string") {
+        const trimmed = rawAns.trim();
+        const letterIdx = { A: 0, B: 1, C: 2, D: 3 }[trimmed.toUpperCase()];
+        if (letterIdx !== undefined && letterIdx < opts.length) return letterIdx;
+
+        const numVal = Number(trimmed);
+        if (!Number.isNaN(numVal) && numVal >= 0 && numVal < opts.length) return numVal;
+
+        const exactIdx = opts.findIndex(o => o.trim().toLowerCase() === trimmed.toLowerCase());
+        if (exactIdx >= 0) return exactIdx;
+      }
+      return 0;
+    }
+
+    function buildFallbackOptionsForItem(item) {
+      const directCorrect = typeof item.correctText === "string"
+        ? item.correctText
+        : typeof item.tocanOdgovor === "string"
+          ? item.tocanOdgovor
+          : typeof item.answer === "string" && isNaN(Number(item.answer))
+            ? item.answer
+            : null;
+
+      const sameAreaPool = QUESTIONS_POOL.filter(q =>
+        q !== item &&
+        q.type !== "sentence" &&
+        (q.area || q.category) === (item.area || item.category)
+      );
+      const generalPool = QUESTIONS_POOL.filter(q => q !== item && q.type !== "sentence");
+      const sourcePool = sameAreaPool.length >= 3 ? sameAreaPool : generalPool;
+
+      const distractors = [];
+      for (const cand of shuffleArray(sourcePool)) {
+        const candOpts = extractRawOptions(cand);
+        if (candOpts.length) {
+          const cIdx = resolveAnswerIndex(cand, candOpts);
+          const pickText = candOpts[cIdx];
+          if (pickText && pickText !== directCorrect && !distractors.includes(pickText)) {
+            distractors.push(pickText);
+          }
+        }
+        if (distractors.length >= 3) break;
+      }
+
+      const fallbackCorrect = directCorrect || distractors.shift() || "Točan odgovor";
+      while (distractors.length < 3) {
+        distractors.push(`Opcija ${distractors.length + 1}`);
+      }
+
+      return {
+        options: [fallbackCorrect, ...distractors.slice(0, 3)],
+        answer: 0
+      };
+    }
+
+    function normalizeMcqItem(item) {
+      if (!item || typeof item !== "object") return item;
+      let opts = extractRawOptions(item);
+      let ansIdx = 0;
+
+      if (opts.length >= 2) {
+        ansIdx = resolveAnswerIndex(item, opts);
+      } else {
+        const built = buildFallbackOptionsForItem(item);
+        opts = built.options;
+        ansIdx = built.answer;
+      }
+
+      const correctOptionText = opts[ansIdx];
+      const indexedOptions = opts.map((text, idx) => ({ text, idx }));
       const shuffled = shuffleArray(indexedOptions);
       const newAnswerIdx = shuffled.findIndex(entry => entry.text === correctOptionText);
+
       return {
         ...item,
         options: shuffled.map(entry => entry.text),
@@ -2130,24 +2219,41 @@
       if (wb) wb.textContent = getWeekKey();
     }
 
+    function enforceSoloOnlyUi() {
+      state.playMode = "solo";
+
+      const teamEl = document.getElementById("mode-team");
+      if (teamEl) teamEl.style.display = "none";
+
+      const soloEl = document.getElementById("mode-solo");
+      if (soloEl) {
+        soloEl.classList.add("selected");
+        soloEl.style.flex = "1 1 100%";
+      }
+
+      const teamBox = document.getElementById("team-nick-box");
+      if (teamBox) teamBox.style.display = "none";
+
+      const soloBox = document.getElementById("solo-nick-box");
+      if (soloBox) soloBox.style.display = "flex";
+
+      const nickInput = document.getElementById("input-nick-1");
+      if (nickInput && !nickInput.value.trim()) {
+        nickInput.value = FUNNY_NICKS[Math.floor(Math.random() * FUNNY_NICKS.length)];
+      }
+    }
+
     function goScreen(screenId) {
       clearTimer();
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(screenId)?.classList.add("active");
+      enforceSoloOnlyUi();
       updateQuotaLabels();
       updatePoolStatus();
     }
 
     function selectPlayMode(mode) {
-      state.playMode = "solo";
-      const soloEl = document.getElementById("mode-solo");
-      const teamEl = document.getElementById("mode-team");
-      if (soloEl) soloEl.classList.add("selected");
-      if (teamEl) teamEl.classList.remove("selected");
-      const soloBox = document.getElementById("solo-nick-box");
-      const teamBox = document.getElementById("team-nick-box");
-      if (soloBox) soloBox.style.display = "flex";
-      if (teamBox) teamBox.style.display = "none";
+      enforceSoloOnlyUi();
       updateQuotaLabels();
     }
 
@@ -2183,7 +2289,7 @@
       if (["2", "medium", "srednje", "srednja", "zlato", "gold"].includes(raw)) return 2;
       if (["3", "hard", "teško", "teško", "teze", "teže", "platina", "platinum"].includes(raw)) return 3;
 
-      const textLen = String(q?.q || q?.question || q?.sentence || "").length;
+      const textLen = String(q?.q || q?.question || q?.sentence || q?.text || "").length;
       if (textLen < 58) return 1;
       if (textLen < 95) return 2;
       return 3;
@@ -2247,13 +2353,13 @@
     function buildSoloGamePlan() {
       const seen = loadSeenSet();
       const tenMcq = takeFromPool(q => q.type !== "sentence", 10, seen)
-        .map(q => prepareShuffledOptions({ ...q, roundKind: "mcq" }));
+        .map(q => normalizeMcqItem({ ...q, roundKind: "mcq" }));
       const twoSentences = takeFromPool(q => q.type === "sentence", 2, seen)
         .map(q => ({ ...q, type: "sentence", roundKind: "sentence" }));
 
       const imagePool = shuffleArray(IMAGE_CHALLENGES);
       const chosenImages = imagePool.slice(0, 3).map(imgItem =>
-        prepareShuffledOptions({ ...imgItem, roundKind: "image" })
+        normalizeMcqItem({ ...imgItem, roundKind: "image" })
       );
 
       saveSeenSet(seen);
@@ -2262,9 +2368,10 @@
     }
 
     function startGame() {
-      state.playMode = "solo";
+      enforceSoloOnlyUi();
       const nickInput = document.getElementById("input-nick-1");
       const n1 = (nickInput?.value || "").trim() || FUNNY_NICKS[0];
+      if (nickInput && !nickInput.value.trim()) nickInput.value = n1;
       state.players = [n1];
 
       const quotaResult = consumeGameQuotaOrPay(state.players[0]);
@@ -2293,6 +2400,11 @@
       const cleaned = String(raw || "").trim();
       if (!cleaned) return "";
       return /^jeste li znali\??\s*:?/i.test(cleaned) ? cleaned : `Jeste li znali? ${cleaned}`;
+    }
+
+    function getSentenceText(item) {
+      if (!item || typeof item !== "object") return "";
+      return String(item.sentence || item.text || item.answer || "");
     }
 
     function normalizeSentenceCompare(str) {
@@ -2335,13 +2447,11 @@
       document.getElementById("btn-next").style.display = "none";
 
       const rawItem = state.plan[state.round - 1] || takeFromPool(q => q.type !== "sentence", 1, loadSeenSet())[0];
-      const item = rawItem?.roundKind === "sentence" || rawItem?.type === "sentence"
-        ? rawItem
-        : prepareShuffledOptions(rawItem);
+      const isSentence = rawItem?.roundKind === "sentence" || rawItem?.type === "sentence";
+      const item = isSentence ? rawItem : normalizeMcqItem(rawItem);
 
       state.currentItem = item;
       const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
-      const isSentence = item.roundKind === "sentence" || item.type === "sentence";
       const isImage = item.roundKind === "image";
 
       state.timeLeft = isSentence
@@ -2445,7 +2555,7 @@
     }
 
     function renderSentenceRound(item, rankCfg) {
-      const sentence = String(item.sentence || item.answer || "");
+      const sentence = getSentenceText(item);
       const boardHtml = sentence.split(" ").map(word => {
         const tiles = [...word].map(ch => {
           if (!/[A-Za-zČĆŽŠĐčćžšđ]/.test(ch)) {
@@ -2502,7 +2612,7 @@
       if (!guessRaw) return;
 
       const item = state.currentItem;
-      const targetSentence = String(item.sentence || item.answer || "");
+      const targetSentence = getSentenceText(item);
       const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
       const trivia = getTriviaText(item);
 
@@ -2547,7 +2657,7 @@
       state.guessedLetters.add(letter);
 
       const item = state.currentItem;
-      const sentence = String(item.sentence || item.answer || "").toUpperCase();
+      const sentence = getSentenceText(item).toUpperCase();
       if (!sentence.includes(letter)) {
         state.timeLeft = Math.max(0, state.timeLeft - 2);
         updateTimerHud();
@@ -2575,7 +2685,7 @@
           showFeedback(`Rečenica otključana! +${earned} bodova${streakMsg} i +5s bonusa na sljedećoj rečenici.`, trivia);
         } else {
           registerWrongAnswer();
-          showFeedback(`Vrijeme je isteklo! Rečenica je glasila: "${item.sentence || item.answer || ""}".`, trivia);
+          showFeedback(`Vrijeme je isteklo! Rečenica je glasila: "${getSentenceText(item)}".`, trivia);
         }
         document.getElementById("btn-next").style.display = "inline-block";
       }
@@ -2697,10 +2807,17 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      selectPlayMode("solo");
+      enforceSoloOnlyUi();
       updateQuotaLabels();
       updatePoolStatus();
     });
   </script>
 </body>
 </html>
+
+        
+        
+
+      
+
+         
