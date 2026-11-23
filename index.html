@@ -2628,64 +2628,67 @@
       document.getElementById("btn-next").style.display = "inline-block";
     }
 
-    function renderSentenceRound(item, rankCfg) {
-      const sentence = getSentenceText(item);
-      const words = sentence.split(" ").filter(Boolean);
+function renderSentenceRound(item, rankCfg) {
+  const rawSentence = getSentenceText(item);
+  const sentence = String(rawSentence || "").trim();
+  const words = sentence ? sentence.split(/\s+/).filter(Boolean) : [];
 
-      const boardHtml = words.map(word => {
+  const boardHtml = words.length
+    ? words.map(word => {
         const tiles = [...word].map(ch => {
           if (!/[A-Za-zČĆŽŠĐčćžšđ]/.test(ch)) {
             return `<span style="display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:36px; font-weight:800; font-size:1.1rem; color:#1e293b;">${escapeHtml(ch)}</span>`;
           }
           const upper = ch.toUpperCase();
           const revealed = state.answered || state.guessedLetters.has(upper);
-          return `<span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:38px; border-radius:8px; background:${revealed ? "#ecfdf5" : "#ffffff"}; border:2px solid ${revealed ? "#059669" : "#94a3b8"}; border-bottom:4px solid ${revealed ? "#047857" : "#334155"}; font-weight:900; font-size:1.1rem; color:#0f172a; box-shadow:0 2px 4px rgba(0,0,0,0.06);">${revealed ? escapeHtml(upper) : "_"}</span>`;
+          return `<span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:38px; border-radius:8px; background:${revealed ? "#ecfdf5" : "#ffffff"}; border:2px solid ${revealed ? "#059669" : "#334155"}; border-bottom:4px solid ${revealed ? "#047857" : "#0f172a"}; font-weight:900; font-size:1.1rem; color:#0f172a; box-shadow:0 2px 4px rgba(0,0,0,0.08);">${revealed ? escapeHtml(upper) : "_"}</span>`;
         }).join("");
         return `<span style="display:inline-flex; flex-wrap:wrap; gap:4px; margin:4px 8px;">${tiles}</span>`;
-      }).join("");
+      }).join("")
+    : `<span style="font-size:0.9rem; font-weight:700; color:#b91c1c;">Nema učitanog teksta rečenice za ovu rundu.</span>`;
 
-      const keysHtml = CRO_ALPHABET.map(letter => {
-        const used = state.guessedLetters.has(letter);
-        return `<button type="button" class="key-btn ${used ? "miss" : ""}" ${used || state.answered ? "disabled" : ""} onclick="guessSentenceLetter('${letter}')">${letter}</button>`;
-      }).join("");
+  const keysHtml = CRO_ALPHABET.map(letter => {
+    const used = state.guessedLetters.has(letter);
+    return `<button type="button" class="key-btn ${used ? "miss" : ""}" ${used || state.answered ? "disabled" : ""} onclick="guessSentenceLetter('${letter}')">${letter}</button>`;
+  }).join("");
 
-      const currentInputVal = document.getElementById("full-sentence-input")?.value || "";
+  const currentInputVal = document.getElementById("full-sentence-input")?.value || "";
 
-      document.getElementById("game-content").innerHTML = `
-        <div class="q-meta">
-          <span class="badge">Rečenica</span>
-          <span class="badge">${escapeHtml(item.area || item.category || "Pogodi rečenicu")}</span>
-          <span class="badge">${rankCfg.label} · Reč. ${rankCfg.sentence}s</span>
-        </div>
-        <div class="clue-banner">Trag: ${escapeHtml(item.clue || "Pogodi rečenicu")}</div>
-        <div
-          id="sentence-slots-board"
-          style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px; margin:12px 0; padding:12px 8px; border-radius:14px; background:rgba(255,255,255,0.72); border:1.5px dashed rgba(34,38,44,0.22);"
-        >
-          ${boardHtml}
-        </div>
-        <div class="nick-row" style="margin-bottom:10px;">
-          <input
-            id="full-sentence-input"
-            class="nick-input"
-            type="text"
-            value="${escapeHtml(currentInputVal)}"
-            placeholder="Upiši cijelu rečenicu ovdje..."
-            ${state.answered ? "disabled" : ""}
-            onkeydown="if(event.key==='Enter'){event.preventDefault();submitFullSentence();}"
-          />
-          <button
-            type="button"
-            class="btn btn-gold"
-            ${state.answered ? "disabled" : ""}
-            onclick="submitFullSentence()"
-          >
-            ✍️ Pogodi rečenicu
-          </button>
-        </div>
-        <div class="big-keyboard">${keysHtml}</div>
-      `;
-    }
+  document.getElementById("game-content").innerHTML = `
+    <div class="q-meta">
+      <span class="badge">Rečenica</span>
+      <span class="badge">${escapeHtml(item?.area || item?.category || "Pogodi rečenicu")}</span>
+      <span class="badge">${escapeHtml(rankCfg?.label || "")} · Reč. ${escapeHtml(String(rankCfg?.sentence ?? ""))}s</span>
+    </div>
+    <div class="clue-banner">Trag: ${escapeHtml(item?.clue || "Pogodi rečenicu")}</div>
+    <div
+      id="sentence-slots-board"
+      style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; min-height:54px; gap:6px; margin:12px 0; padding:12px 8px; border-radius:14px; background:#ffffff; border:2px solid #334155; position:relative; z-index:2;"
+    >
+      ${boardHtml}
+    </div>
+    <div class="nick-row" style="margin-bottom:10px;">
+      <input
+        id="full-sentence-input"
+        class="nick-input"
+        type="text"
+        value="${escapeHtml(currentInputVal)}"
+        placeholder="Upiši cijelu rečenicu ovdje..."
+        ${state.answered ? "disabled" : ""}
+        onkeydown="if(event.key==='Enter'){event.preventDefault();submitFullSentence();}"
+      />
+      <button
+        type="button"
+        class="btn btn-gold"
+        ${state.answered ? "disabled" : ""}
+        onclick="submitFullSentence()"
+      >
+        ✍️ Pogodi rečenicu
+      </button>
+    </div>
+    <div class="big-keyboard">${keysHtml}</div>
+  `;
+}
 
     function submitFullSentence() {
       if (state.answered) return;
