@@ -1917,507 +1917,790 @@
       { id: "s10", clue: "Izreka", text: "ZNANJE JE MOĆ" },
       { id: "s11", clue: "Poslovica", text: "TKO ČEKA TAJ DOČEKA" },
       { id: "s12", clue: "Film", text: "KUM" }
+ 
+        ];
+
+    const CRO_ALPHABET = [
+      "A","B","C","Č","Ć","D","DŽ","Đ","E","F","G","H","I","J","K","L","LJ",
+      "M","N","NJ","O","P","R","S","Š","T","U","V","Z","Ž"
     ];
 
-    const KEYBOARD_LETTERS = [
-      "A","B","C","Č","Ć","D","Đ","E","F","G","H","I","J","K","L","M","N","O","P","R","S","Š","T","U","V","Z","Ž",
-      "Q","W","X","Y"
+    const IMAGE_CHALLENGES = [
+      {
+        area: "Zastave svijeta",
+        q: "Koja država ima ovu prepoznatljivu zastavu sa sunčevim krugom?",
+        image: "https://flagcdn.com/w640/jp.png",
+        options: ["Japan", "Južna Koreja", "Tajvan", "Bangladeš"],
+        answer: 0,
+        jesteLiZnali: "Japanska zastava naziva se Hinomaru ('sunčev krug'), a bijela podloga simbolizira čistoću i iskrenost."
+      },
+      {
+        area: "Zastave svijeta",
+        q: "Koji je ovo državni stijeg sa zeleno-žuto-plavim motivom i zvijezdama?",
+        image: "https://flagcdn.com/w640/br.png",
+        options: ["Brazil", "Kolumbija", "Argentina", "Ekvador"],
+        answer: 0,
+        jesteLiZnali: "Zvijezde na brazilskoj zastavi raspoređene su prema izgledu noćnog neba iznad Rio de Janeira ujutro 15. studenoga 1889."
+      },
+      {
+        area: "Zastave svijeta",
+        q: "Koja država ima ovaj nordijski križ?",
+        image: "https://flagcdn.com/w640/no.png",
+        options: ["Norveška", "Švedska", "Danska", "Finska"],
+        answer: 0,
+        jesteLiZnali: "Norveška zastava kombinira crvenu i bijelu (poput danske) s plavim križem (poput švedske i finske)."
+      },
+      {
+        area: "Zastave svijeta",
+        q: "Čija je ovo zastava?",
+        image: "https://flagcdn.com/w640/ca.png",
+        options: ["Kanada", "Peru", "Švicarska", "Austrija"],
+        answer: 0,
+        jesteLiZnali: "Kanadska zastava sa stiliziranim javorovim listom službeno je usvojena 1965. godine."
+      },
+      {
+        area: "Zastave svijeta",
+        q: "Kojoj državi pripada ova zastava?",
+        image: "https://flagcdn.com/w640/ma.png",
+        options: ["Maroko", "Tunis", "Alžir", "Jordan"],
+        answer: 0,
+        jesteLiZnali: "Zelena pentagramska zvijezda na crvenoj podlozi predstavlja Salomonov pečat i pet stupova islama."
+      },
+      {
+        area: "Zastave svijeta",
+        q: "Koja otočna država na sjeveru Europe ima ovu zastavu?",
+        image: "https://flagcdn.com/w640/is.png",
+        options: ["Island", "Farski otoci", "Norveška", "Škotska"],
+        answer: 0,
+        jesteLiZnali: "Plava boja na islandskoj zastavi simbolizira more i nebo, bijela led i snijeg, a crvena vulkansku vatru."
+      },
+      {
+        area: "Gradovi i znamenitosti",
+        q: "U kojem se gradu nalazi ova znamenitost?",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/640px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg",
+        options: ["Pariz", "Lyon", "Marseille", "Bruxelles"],
+        answer: 0,
+        jesteLiZnali: "Eiffelov toranj ljeti može narasti i do 15 centimetara zbog toplinskog širenja željeza."
+      },
+      {
+        area: "Gradovi i znamenitosti",
+        q: "Koji je ovo grad poznat po kanalima i mostovima?",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Grand_Canal_Venice.jpg/640px-Grand_Canal_Venice.jpg",
+        options: ["Venecija", "Firenca", "Verona", "Ravenna"],
+        answer: 0,
+        jesteLiZnali: "Povijesna jezgra Venecije izgrađena je na više od stotinu manjih otoka u venecijanskoj laguni."
+      },
+      {
+        area: "Instrumenti",
+        q: "Koji gudački instrument je prikazan na slici?",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Violin_VL100.png/480px-Violin_VL100.png",
+        options: ["Violina", "Viola", "Kontrabas", "Mandolina"],
+        answer: 0,
+        jesteLiZnali: "Violina ima četiri žice najčešće ugođene na G3, D4, A4 i E5, u intervalima čistih kvinti."
+      },
+      {
+        area: "Alati",
+        q: "Koji je točan naziv ovog alata?",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Claw-hammer.jpg/640px-Claw-hammer.jpg",
+        options: ["Kandžasti čekić", "Macola", "Dlijeto", "Škripac"],
+        answer: 0,
+        jesteLiZnali: "Zakrivljeni rascjep na stražnjoj strani glave čekića služi kao poluga za čupanje čavala."
+      }
     ];
 
-    const STORAGE_SEEN = "skolica_seen_ids_v1";
-    const STORAGE_WEEKLY_BOARD = "skolica_weekly_leaderboard_v1";
-
-    let state = {
-      playMode: "solo", // 'solo' | 'team'
-      rank: "srebro",   // 'srebro' | 'zlato' | 'platina'
-      roundType: "mix", // 'mix' | 'mcq' | 'sentence'
-      players: ["Kralj Kredom"],
-      scores: [0],
+    const state = {
+      playMode: "solo",
+      rank: "srebro",
+      roundType: "mix",
+      players: [],
       turnIndex: 0,
-      roundNum: 1,
-      maxRounds: 6,
-      timerLeft: 30,
-      maxTime: 30,
-      timerId: null,
+      round: 1,
+      maxRounds: 15,
+      plan: [],
+      scores: [0, 0],
+      correctCount: 0,
+      streakCount: 0,
+      timer: null,
+      timeLeft: 30,
       answered: false,
       currentItem: null,
-      currentKind: null, // 'mcq' | 'sentence'
       guessedLetters: new Set(),
-      wrongGuesses: 0,
+      sentenceBonusTime: 0,
       lastSummary: ""
     };
 
-    function getCurrentWeekKey(date = new Date()) {
-      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-      const dayNum = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-      return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
-    function goScreen(id) {
-      clearTimer();
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      updatePoolStatus();
+    function prepareShuffledOptions(item) {
+      if (!item || !Array.isArray(item.options) || item.options.length < 2) {
+        return item;
+      }
+      const originalAnswerIdx = typeof item.answer === "number" ? item.answer : 0;
+      const correctOptionText = item.options[originalAnswerIdx];
+      const indexedOptions = item.options.map((text, idx) => ({ text, idx }));
+      const shuffled = shuffleArray(indexedOptions);
+      const newAnswerIdx = shuffled.findIndex(entry => entry.text === correctOptionText);
+      return {
+        ...item,
+        options: shuffled.map(entry => entry.text),
+        answer: newAnswerIdx >= 0 ? newAnswerIdx : 0
+      };
     }
 
-    function openLeaderboard(summaryText = "") {
-      renderLeaderboard(summaryText);
-      goScreen("screen-board");
+    function getWeekKey() {
+      const now = new Date();
+      const target = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+      const dayNum = target.getUTCDay() || 7;
+      target.setUTCDate(target.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
+      const weekNo = Math.ceil((((target - yearStart) / 86400000) + 1) / 7);
+      return `${target.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
     }
 
-    function getSeenIds() {
+    function loadBoard() {
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_SEEN) || "[]");
+        const raw = localStorage.getItem(`skolica_board_${getWeekKey()}`);
+        return raw ? JSON.parse(raw) : [];
       } catch {
         return [];
       }
     }
 
-    function markSeen(id) {
-      const seen = new Set(getSeenIds());
-      seen.add(id);
-      localStorage.setItem(STORAGE_SEEN, JSON.stringify([...seen]));
-      updatePoolStatus();
+    function saveBoard(list) {
+      localStorage.setItem(`skolica_board_${getWeekKey()}`, JSON.stringify(list));
+    }
+
+    function recordScoreToBoard(name, pts) {
+      const cleanName = String(name || "").trim() || FUNNY_NICKS[0];
+      const board = loadBoard();
+      const idx = board.findIndex(item => item.name.toLowerCase() === cleanName.toLowerCase());
+      if (idx >= 0) {
+        board[idx].score = (board[idx].score || 0) + pts;
+        board[idx].updated = Date.now();
+      } else {
+        board.push({ name: cleanName, score: pts, updated: Date.now() });
+      }
+      board.sort((a, b) => b.score - a.score || (b.updated || 0) - (a.updated || 0));
+      saveBoard(board.slice(0, 25));
+    }
+
+    function getLeaderInfo() {
+      const board = loadBoard();
+      if (!board.length) return null;
+      return board[0];
+    }
+
+    function getSeenKey() {
+      return `skolica_seen_${QUESTIONS_POOL.length}`;
+    }
+
+    function loadSeenSet() {
+      try {
+        const raw = localStorage.getItem(getSeenKey());
+        return new Set(raw ? JSON.parse(raw) : []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveSeenSet(set) {
+      localStorage.setItem(getSeenKey(), JSON.stringify([...set]));
     }
 
     function resetSeenPool() {
-      localStorage.removeItem(STORAGE_SEEN);
+      localStorage.removeItem(getSeenKey());
       updatePoolStatus();
-      alert("Povijest odigranih pitanja je resetirana — kreće svjež krug!");
+      alert("Krug pitanja je resetiran — kreće nova tura bez ponavljanja!");
     }
 
     function updatePoolStatus() {
-      const seenCount = getSeenIds().length;
-      const total = QUESTIONS_POOL.length + SENTENCES_POOL.length;
-      document.getElementById("pool-status").textContent =
-        `Odigrano u bazi: ${seenCount}/${total} stavki (bez ponavljanja dok traje krug)`;
+      const seen = loadSeenSet();
+      const el = document.getElementById("pool-status");
+      if (el) {
+        el.textContent = `Odigrano u bazi: ${seen.size}/${QUESTIONS_POOL.length} stavki`;
+      }
+      const wb = document.getElementById("week-badge");
+      if (wb) wb.textContent = getWeekKey();
     }
 
-    function pickUnseen(pool) {
-      const seen = new Set(getSeenIds());
-      const fresh = pool.filter(item => !seen.has(item.id));
-      const source = fresh.length > 0 ? fresh : pool;
-      return source[Math.floor(Math.random() * source.length)];
-    }
-
-    function randomizeNick(slot) {
-      const pick = FUNNY_NICKS[Math.floor(Math.random() * FUNNY_NICKS.length)];
-      document.getElementById(`input-nick-${slot}`).value = pick;
-    }
-
-    function randomizeTeam(num) {
-      const pick = FUNNY_TEAMS[Math.floor(Math.random() * FUNNY_TEAMS.length)];
-      document.getElementById(`input-team-${num}`).value = pick;
+    function goScreen(screenId) {
+      clearTimer();
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(screenId)?.classList.add("active");
+      updateQuotaLabels();
+      updatePoolStatus();
     }
 
     function selectPlayMode(mode) {
-      state.playMode = mode;
-      document.getElementById("mode-solo").classList.toggle("selected", mode === "solo");
-      document.getElementById("mode-team").classList.toggle("selected", mode === "team");
-      document.getElementById("solo-nick-box").style.display = mode === "solo" ? "flex" : "none";
-      document.getElementById("team-nick-box").style.display = mode === "team" ? "block" : "none";
+      state.playMode = "solo";
+      const soloEl = document.getElementById("mode-solo");
+      const teamEl = document.getElementById("mode-team");
+      if (soloEl) soloEl.classList.add("selected");
+      if (teamEl) teamEl.classList.remove("selected");
+      const soloBox = document.getElementById("solo-nick-box");
+      const teamBox = document.getElementById("team-nick-box");
+      if (soloBox) soloBox.style.display = "flex";
+      if (teamBox) teamBox.style.display = "none";
+      updateQuotaLabels();
     }
 
-    function selectRank(r) {
-      state.rank = r;
-      ["srebro", "zlato", "platina"].forEach(k => {
-        document.getElementById(`rank-${k}`).classList.toggle("active", k === r);
+    function randomizeNick(slot = 1) {
+      const input = document.getElementById(`input-nick-${slot}`) || document.getElementById("input-nick-1");
+      if (input) {
+        input.value = FUNNY_NICKS[Math.floor(Math.random() * FUNNY_NICKS.length)];
+        updateQuotaLabels();
+      }
+    }
+
+    function randomizeTeam(slot) {
+      randomizeNick(1);
+    }
+
+    function selectRank(rank) {
+      state.rank = ["srebro", "zlato", "platina"].includes(rank) ? rank : "srebro";
+      ["srebro", "zlato", "platina"].forEach(r => {
+        document.getElementById(`rank-${r}`)?.classList.toggle("active", r === state.rank);
       });
     }
 
-    function selectRoundType(rt) {
-      state.roundType = rt;
-      ["mix", "mcq", "sentence"].forEach(k => {
-        document.getElementById(`round-${k}`).classList.toggle("active", k === rt);
+    function selectRoundType(type) {
+      state.roundType = type;
+      ["mix", "mcq", "sentence"].forEach(t => {
+        document.getElementById(`round-${t}`)?.classList.toggle("active", t === type);
       });
+    }
+
+    function getDifficultyRankScore(q) {
+      const raw = String(q?.diff || q?.difficulty || q?.level || q?.težina || q?.tezina || "").toLowerCase().trim();
+      if (["1", "easy", "lako", "lakše", "lakse", "srebro", "silver"].includes(raw)) return 1;
+      if (["2", "medium", "srednje", "srednja", "zlato", "gold"].includes(raw)) return 2;
+      if (["3", "hard", "teško", "teško", "teze", "teže", "platina", "platinum"].includes(raw)) return 3;
+
+      const textLen = String(q?.q || q?.question || q?.sentence || "").length;
+      if (textLen < 58) return 1;
+      if (textLen < 95) return 2;
+      return 3;
+    }
+
+    function filterByRank(entries, targetRank) {
+      const tierMap = { srebro: 1, zlato: 2, platina: 3 };
+      const target = tierMap[targetRank] || 1;
+      if (!entries.length) return entries;
+
+      const sorted = [...entries].sort((a, b) => {
+        const diffA = Math.abs(getDifficultyRankScore(a.q) - target);
+        const diffB = Math.abs(getDifficultyRankScore(b.q) - target);
+        if (diffA !== diffB) return diffA - diffB;
+        if (target === 1) return getDifficultyRankScore(a.q) - getDifficultyRankScore(b.q);
+        if (target === 3) return getDifficultyRankScore(b.q) - getDifficultyRankScore(a.q);
+        return Math.random() - 0.5;
+      });
+
+      const topCount = Math.max(1, Math.ceil(sorted.length * 0.45));
+      return sorted.slice(0, topCount);
+    }
+
+    function takeFromPool(predicate, count, seen) {
+      let candidates = QUESTIONS_POOL
+        .map((q, idx) => ({ q, idx }))
+        .filter(entry => predicate(entry.q));
+
+      if (!candidates.length) {
+        candidates = QUESTIONS_POOL.map((q, idx) => ({ q, idx }));
+      }
+
+      const ranked = filterByRank(candidates, state.rank);
+      let unseen = ranked.filter(entry => !seen.has(entry.idx));
+      if (unseen.length < count) {
+        const extraUnseen = candidates.filter(entry => !seen.has(entry.idx));
+        unseen = [...unseen, ...extraUnseen.filter(e => !unseen.some(u => u.idx === e.idx))];
+      }
+      if (unseen.length < count) {
+        candidates.forEach(entry => seen.delete(entry.idx));
+        unseen = filterByRank(candidates, state.rank);
+      }
+
+      const chosen = [];
+      const available = [...unseen];
+      while (chosen.length < count && available.length > 0) {
+        const pickIdx = Math.floor(Math.random() * available.length);
+        const pick = available.splice(pickIdx, 1)[0];
+        seen.add(pick.idx);
+        chosen.push(pick.q);
+      }
+
+      while (chosen.length < count && candidates.length > 0) {
+        const fallback = candidates[chosen.length % candidates.length].q;
+        chosen.push(fallback);
+      }
+
+      return chosen;
+    }
+
+    function buildSoloGamePlan() {
+      const seen = loadSeenSet();
+      const tenMcq = takeFromPool(q => q.type !== "sentence", 10, seen)
+        .map(q => prepareShuffledOptions({ ...q, roundKind: "mcq" }));
+      const twoSentences = takeFromPool(q => q.type === "sentence", 2, seen)
+        .map(q => ({ ...q, type: "sentence", roundKind: "sentence" }));
+
+      const imagePool = shuffleArray(IMAGE_CHALLENGES);
+      const chosenImages = imagePool.slice(0, 3).map(imgItem =>
+        prepareShuffledOptions({ ...imgItem, roundKind: "image" })
+      );
+
+      saveSeenSet(seen);
+      updatePoolStatus();
+      return [...tenMcq, ...twoSentences, ...chosenImages];
     }
 
     function startGame() {
-      state.lastSummary = "";
-      if (state.playMode === "solo") {
-        const raw = document.getElementById("input-nick-1").value.trim();
-        const nick = raw || FUNNY_NICKS[Math.floor(Math.random() * FUNNY_NICKS.length)];
-        document.getElementById("input-nick-1").value = nick;
-        state.players = [nick];
-        state.scores = [0];
-      } else {
-        const t1 = document.getElementById("input-team-1").value.trim() || "Ekipa s Velikog Odmora";
-        const t2 = document.getElementById("input-team-2").value.trim() || "Zadnja Klupa";
-        document.getElementById("input-team-1").value = t1;
-        document.getElementById("input-team-2").value = t2;
-        state.players = [t1, t2];
-        state.scores = [0, 0];
+      state.playMode = "solo";
+      const nickInput = document.getElementById("input-nick-1");
+      const n1 = (nickInput?.value || "").trim() || FUNNY_NICKS[0];
+      state.players = [n1];
+
+      const quotaResult = consumeGameQuotaOrPay(state.players[0]);
+      if (!quotaResult.allowed) {
+        alert(quotaResult.message);
+        return;
       }
 
+      state.plan = buildSoloGamePlan();
       state.turnIndex = 0;
-      state.roundNum = 1;
-      state.maxRounds = state.playMode === "team" ? 8 : 6;
+      state.round = 1;
+      state.maxRounds = state.plan.length;
+      state.scores = [0, 0];
+      state.correctCount = 0;
+      state.streakCount = 0;
+      state.sentenceBonusTime = 0;
+      state.lastSummary = quotaResult.message;
 
       goScreen("screen-game");
-      loadRound();
+      setupTurn();
     }
 
-    function loadRound() {
+    function getTriviaText(item) {
+      if (!item || typeof item !== "object") return "";
+      const raw = item.jesteLiZnali || item.didYouKnow || item.zanimljivost || item.trivia || item.info || item.fact || "";
+      const cleaned = String(raw || "").trim();
+      if (!cleaned) return "";
+      return /^jeste li znali\??\s*:?/i.test(cleaned) ? cleaned : `Jeste li znali? ${cleaned}`;
+    }
+
+    function normalizeSentenceCompare(str) {
+      return String(str || "")
+        .toUpperCase()
+        .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function getStageLabel(item) {
+      if (item.roundKind === "image") return "Runda slika";
+      if (item.roundKind === "sentence" || item.type === "sentence") return "Rečenica";
+      return "Pitanje";
+    }
+
+    function registerCorrectAnswer(basePoints, rankCfg) {
+      state.correctCount += 1;
+      state.streakCount += 1;
+      const streakBonus = state.streakCount >= 3 ? 25 : 0;
+      const earned = Math.round((basePoints + streakBonus) * rankCfg.mult);
+      state.scores[0] += earned;
+      document.getElementById("hud-score").textContent = state.scores[0];
+      return { earned, streakBonus };
+    }
+
+    function registerWrongAnswer() {
+      state.streakCount = 0;
+    }
+
+    function setupTurn() {
       clearTimer();
       state.answered = false;
       state.guessedLetters = new Set();
-      state.wrongGuesses = 0;
-
-      document.getElementById("btn-next").style.display = "none";
       const fb = document.getElementById("feedback-box");
-      fb.className = "feedback-box";
-      fb.textContent = "";
+      if (fb) {
+        fb.className = "feedback-box";
+        fb.innerHTML = "";
+      }
+      document.getElementById("btn-next").style.display = "none";
 
-      let kind = "mcq";
-      if (state.roundType === "sentence") kind = "sentence";
-      else if (state.roundType === "mix") kind = state.roundNum % 2 === 0 ? "sentence" : "mcq";
+      const rawItem = state.plan[state.round - 1] || takeFromPool(q => q.type !== "sentence", 1, loadSeenSet())[0];
+      const item = rawItem?.roundKind === "sentence" || rawItem?.type === "sentence"
+        ? rawItem
+        : prepareShuffledOptions(rawItem);
 
-      state.currentKind = kind;
-      const rInfo = RANK_TIMES[state.rank];
-      state.maxTime = kind === "sentence" ? rInfo.sentence : rInfo.base;
-      state.timerLeft = state.maxTime;
+      state.currentItem = item;
+      const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
+      const isSentence = item.roundKind === "sentence" || item.type === "sentence";
+      const isImage = item.roundKind === "image";
 
-      updateHud();
+      state.timeLeft = isSentence
+        ? (rankCfg.sentence + state.sentenceBonusTime)
+        : isImage
+          ? (rankCfg.base + 5)
+          : rankCfg.base;
 
-      if (kind === "mcq") {
-        const item = pickUnseen(QUESTIONS_POOL);
-        state.currentItem = item;
-        markSeen(item.id);
-        renderMcq(item, rInfo.label);
+      if (isSentence) state.sentenceBonusTime = 0;
+
+      document.getElementById("hud-player").textContent = state.players[0] || "Solo igrač";
+      document.getElementById("hud-round").textContent = `${state.round}/${state.maxRounds} · Točno: ${state.correctCount}`;
+      document.getElementById("hud-score").textContent = state.scores[0] || 0;
+      updateTimerHud();
+
+      if (isSentence) {
+        renderSentenceRound(item, rankCfg);
+      } else if (isImage) {
+        renderImageRound(item, rankCfg);
       } else {
-        const item = pickUnseen(SENTENCES_POOL);
-        state.currentItem = item;
-        markSeen(item.id);
-        renderSentence(item, rInfo.label);
+        renderMcqRound(item, rankCfg);
       }
 
       startTimer();
     }
 
-    function updateHud() {
-      document.getElementById("hud-player").textContent = state.players[state.turnIndex];
-      document.getElementById("hud-round").textContent = `${state.roundNum}/${state.maxRounds}`;
-      const tEl = document.getElementById("hud-timer");
-      tEl.textContent = `${state.timerLeft}s`;
-      tEl.classList.toggle("timer-urgent", state.timerLeft <= 5);
-      document.getElementById("hud-score").textContent = state.scores[state.turnIndex];
+    function renderMcqRound(item, rankCfg) {
+      const opts = Array.isArray(item.options) ? item.options : [];
+      document.getElementById("game-content").innerHTML = `
+        <div class="q-meta">
+          <span class="badge">${getStageLabel(item)}</span>
+          <span class="badge">${escapeHtml(item.area || item.category || "Opće znanje")}</span>
+          <span class="badge">${rankCfg.label} · ${rankCfg.base}s</span>
+        </div>
+        <div class="q-text">${escapeHtml(item.q || item.question || "")}</div>
+        <div class="options-grid">
+          ${opts.map((opt, idx) => `<button type="button" class="opt-btn" onclick="answerMcq(${idx})">${escapeHtml(opt)}</button>`).join("")}
+        </div>
+      `;
+    }
+
+    function renderImageRound(item, rankCfg) {
+      const opts = Array.isArray(item.options) ? item.options : [];
+      const imgUrl = escapeHtml(item.image || item.img || "");
+      document.getElementById("game-content").innerHTML = `
+        <div class="q-meta">
+          <span class="badge">Runda slika</span>
+          <span class="badge">${escapeHtml(item.area || item.category || "Pogodi sliku")}</span>
+          <span class="badge">${rankCfg.label}</span>
+        </div>
+        <div class="q-text">${escapeHtml(item.q || item.question || "Što je na slici?")}</div>
+        <div id="image-round-box" style="margin:12px 0; text-align:center;">
+          <img
+            id="round-challenge-img"
+            src="${imgUrl}"
+            alt="${escapeHtml(item.q || "Slika za pogađanje")}"
+            style="max-width:100%; max-height:240px; border-radius:14px; object-fit:contain; background:rgba(255,255,255,0.65); padding:6px;"
+            onerror="handleRoundImageError()"
+          />
+        </div>
+        <div class="options-grid">
+          ${opts.map((opt, idx) => `<button type="button" class="opt-btn" onclick="answerMcq(${idx})">${escapeHtml(opt)}</button>`).join("")}
+        </div>
+      `;
+    }
+
+    function handleRoundImageError() {
+      const box = document.getElementById("image-round-box");
+      if (!box) return;
+      box.innerHTML = `<div class="clue-banner">Slika se trenutno nije uspjela učitati — odgovori prema ponuđenim opcijama ispod!</div>`;
+    }
+
+    function answerMcq(chosenIdx) {
+      if (state.answered) return;
+      state.answered = true;
+      clearTimer();
+
+      const item = state.currentItem;
+      const correctIdx = typeof item.answer === "number" ? item.answer : 0;
+      document.querySelectorAll(".opt-btn").forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === correctIdx) btn.classList.add("correct");
+        else if (idx === chosenIdx) btn.classList.add("wrong");
+      });
+
+      const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
+      const trivia = getTriviaText(item);
+      const isImage = item?.roundKind === "image";
+
+      if (chosenIdx === correctIdx) {
+        const basePts = (isImage ? 140 : 100) + state.timeLeft * 5;
+        const { earned, streakBonus } = registerCorrectAnswer(basePts, rankCfg);
+        const streakMsg = streakBonus > 0 ? ` (uključen niz bonus!)` : "";
+        document.getElementById("hud-round").textContent = `${state.round}/${state.maxRounds} · Točno: ${state.correctCount}`;
+        showFeedback(`Točno! +${earned} bodova${streakMsg}.`, trivia);
+      } else {
+        registerWrongAnswer();
+        showFeedback(`Nije točno — točan odgovor je "${item.options?.[correctIdx] || ""}".`, trivia);
+      }
+      document.getElementById("btn-next").style.display = "inline-block";
+    }
+
+    function renderSentenceRound(item, rankCfg) {
+      const sentence = String(item.sentence || item.answer || "");
+      const boardHtml = sentence.split(" ").map(word => {
+        const tiles = [...word].map(ch => {
+          if (!/[A-Za-zČĆŽŠĐčćžšđ]/.test(ch)) {
+            return `<span class="letter-tile punct">${escapeHtml(ch)}</span>`;
+          }
+          const revealed = state.answered || state.guessedLetters.has(ch.toUpperCase());
+          return `<span class="letter-tile">${revealed ? escapeHtml(ch.toUpperCase()) : ""}</span>`;
+        }).join("");
+        return `<span class="word-group">${tiles}</span>`;
+      }).join("");
+
+      const keysHtml = CRO_ALPHABET.map(letter => {
+        const used = state.guessedLetters.has(letter);
+        return `<button type="button" class="key-btn ${used ? "miss" : ""}" ${used || state.answered ? "disabled" : ""} onclick="guessSentenceLetter('${letter}')">${letter}</button>`;
+      }).join("");
+
+      const currentInputVal = document.getElementById("full-sentence-input")?.value || "";
+
+      document.getElementById("game-content").innerHTML = `
+        <div class="q-meta">
+          <span class="badge">Rečenica</span>
+          <span class="badge">${escapeHtml(item.area || item.category || "Pogodi rečenicu")}</span>
+          <span class="badge">${rankCfg.label} · Reč. ${rankCfg.sentence}s</span>
+        </div>
+        <div class="clue-banner">Trag: ${escapeHtml(item.clue || "Pogodi rečenicu")}</div>
+        <div class="sentence-board">${boardHtml}</div>
+        <div class="nick-row" style="margin-bottom:10px;">
+          <input
+            id="full-sentence-input"
+            class="nick-input"
+            type="text"
+            value="${escapeHtml(currentInputVal)}"
+            placeholder="Upiši cijelu rečenicu ovdje..."
+            ${state.answered ? "disabled" : ""}
+            onkeydown="if(event.key==='Enter'){event.preventDefault();submitFullSentence();}"
+          />
+          <button
+            type="button"
+            class="btn btn-gold"
+            ${state.answered ? "disabled" : ""}
+            onclick="submitFullSentence()"
+          >
+            ✍️ Pogodi rečenicu
+          </button>
+        </div>
+        <div class="big-keyboard">${keysHtml}</div>
+      `;
+    }
+
+    function submitFullSentence() {
+      if (state.answered) return;
+      const inputEl = document.getElementById("full-sentence-input");
+      const guessRaw = (inputEl?.value || "").trim();
+      if (!guessRaw) return;
+
+      const item = state.currentItem;
+      const targetSentence = String(item.sentence || item.answer || "");
+      const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
+      const trivia = getTriviaText(item);
+
+      if (normalizeSentenceCompare(guessRaw) === normalizeSentenceCompare(targetSentence)) {
+        state.answered = true;
+        clearTimer();
+        [...targetSentence.toUpperCase()].forEach(ch => {
+          if (/[A-ZČĆŽŠĐ]/.test(ch)) state.guessedLetters.add(ch);
+        });
+        renderSentenceRound(item, rankCfg);
+        document.querySelectorAll(".key-btn, #full-sentence-input").forEach(el => {
+          el.disabled = true;
+        });
+
+        const basePts = 180 + state.timeLeft * 7;
+        const { earned, streakBonus } = registerCorrectAnswer(basePts, rankCfg);
+        state.sentenceBonusTime = 5;
+        const streakMsg = streakBonus > 0 ? ` (uključen niz bonus!)` : "";
+        document.getElementById("hud-round").textContent = `${state.round}/${state.maxRounds} · Točno: ${state.correctCount}`;
+        showFeedback(`Odlično! Pogodila si cijelu rečenicu! +${earned} bodova${streakMsg} i +5s bonusa na sljedećoj rečenici.`, trivia);
+        document.getElementById("btn-next").style.display = "inline-block";
+      } else {
+        state.timeLeft = Math.max(0, state.timeLeft - 3);
+        updateTimerHud();
+        showFeedback(`Nije ta rečenica (-3s). Možeš pokušati ponovno ili birati slova ispod.`, trivia);
+        if (state.timeLeft <= 0) {
+          state.answered = true;
+          clearTimer();
+          registerWrongAnswer();
+          renderSentenceRound(item, rankCfg);
+          document.querySelectorAll(".key-btn, #full-sentence-input").forEach(el => {
+            el.disabled = true;
+          });
+          showFeedback(`Vrijeme je isteklo! Rečenica je glasila: "${targetSentence}".`, trivia);
+          document.getElementById("btn-next").style.display = "inline-block";
+        }
+      }
+    }
+
+    function guessSentenceLetter(letter) {
+      if (state.answered || state.guessedLetters.has(letter)) return;
+      state.guessedLetters.add(letter);
+
+      const item = state.currentItem;
+      const sentence = String(item.sentence || item.answer || "").toUpperCase();
+      if (!sentence.includes(letter)) {
+        state.timeLeft = Math.max(0, state.timeLeft - 2);
+        updateTimerHud();
+      }
+
+      const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
+      renderSentenceRound(item, rankCfg);
+
+      const allLetters = [...sentence].filter(ch => /[A-ZČĆŽŠĐ]/.test(ch));
+      const solved = allLetters.length > 0 && allLetters.every(ch => state.guessedLetters.has(ch));
+
+      if (solved || state.timeLeft <= 0) {
+        state.answered = true;
+        clearTimer();
+        document.querySelectorAll(".key-btn, #full-sentence-input").forEach(el => {
+          el.disabled = true;
+        });
+        const trivia = getTriviaText(item);
+        if (solved) {
+          const basePts = 150 + state.timeLeft * 6;
+          const { earned, streakBonus } = registerCorrectAnswer(basePts, rankCfg);
+          state.sentenceBonusTime = 5;
+          const streakMsg = streakBonus > 0 ? ` (uključen niz bonus!)` : "";
+          document.getElementById("hud-round").textContent = `${state.round}/${state.maxRounds} · Točno: ${state.correctCount}`;
+          showFeedback(`Rečenica otključana! +${earned} bodova${streakMsg} i +5s bonusa na sljedećoj rečenici.`, trivia);
+        } else {
+          registerWrongAnswer();
+          showFeedback(`Vrijeme je isteklo! Rečenica je glasila: "${item.sentence || item.answer || ""}".`, trivia);
+        }
+        document.getElementById("btn-next").style.display = "inline-block";
+      }
     }
 
     function startTimer() {
       clearTimer();
-      state.timerId = setInterval(() => {
-        if (state.answered) return;
-        state.timerLeft -= 1;
-        updateHud();
-        if (state.timerLeft <= 0) {
+      state.timer = setInterval(() => {
+        state.timeLeft -= 1;
+        updateTimerHud();
+        if (state.timeLeft <= 0) {
           clearTimer();
-          handleTimeout();
+          if (!state.answered) {
+            state.answered = true;
+            registerWrongAnswer();
+            document.querySelectorAll(".opt-btn, .key-btn, #full-sentence-input").forEach(el => {
+              el.disabled = true;
+            });
+            const trivia = getTriviaText(state.currentItem);
+            showFeedback("Vrijeme je isteklo!", trivia);
+            document.getElementById("btn-next").style.display = "inline-block";
+          }
         }
       }, 1000);
     }
 
     function clearTimer() {
-      if (state.timerId) {
-        clearInterval(state.timerId);
-        state.timerId = null;
+      if (state.timer) {
+        clearInterval(state.timer);
+        state.timer = null;
       }
     }
 
-    function renderMcq(item, rankLabel) {
-      const container = document.getElementById("game-content");
-      const shuffledOpts = item.opts.map((txt, idx) => ({ txt, isCorrect: idx === item.ans }));
-      for (let i = shuffledOpts.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledOpts[i], shuffledOpts[j]] = [shuffledOpts[j], shuffledOpts[i]];
-      }
-
-      container.innerHTML = `
-        <div class="q-meta">
-          <span class="badge">${escapeHtml(item.area)}</span>
-          <span class="badge">${rankLabel} · ${state.maxTime}s</span>
-        </div>
-        <div class="q-text">${escapeHtml(item.q)}</div>
-        <div class="options-grid" id="mcq-opts"></div>
-      `;
-
-      const optsBox = document.getElementById("mcq-opts");
-      shuffledOpts.forEach(o => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "opt-btn";
-        btn.textContent = o.txt;
-        btn.onclick = () => answerMcq(btn, o.isCorrect, shuffledOpts);
-        optsBox.appendChild(btn);
-      });
+    function updateTimerHud() {
+      const el = document.getElementById("hud-timer");
+      if (!el) return;
+      el.textContent = `${Math.max(0, state.timeLeft)}s`;
+      el.classList.toggle("timer-urgent", state.timeLeft <= 5);
     }
 
-    function answerMcq(clickedBtn, isCorrect, allOpts) {
-      if (state.answered) return;
-      state.answered = true;
-      clearTimer();
-
-      const allBtns = document.querySelectorAll("#mcq-opts .opt-btn");
-      allBtns.forEach((b, i) => {
-        b.disabled = true;
-        if (allOpts[i].isCorrect) b.classList.add("correct");
-      });
-
-      if (isCorrect) {
-        const mult = RANK_TIMES[state.rank].mult;
-        const speedBonus = Math.round((state.timerLeft / state.maxTime) * 70);
-        const pts = Math.round((80 + speedBonus) * mult);
-        state.scores[state.turnIndex] += pts;
-        showFeedback(`✅ Točno! +${pts} bodova (bonus za brzinu: +${speedBonus}).`);
-      } else {
-        clickedBtn.classList.add("wrong");
-        const correctTxt = allOpts.find(x => x.isCorrect).txt;
-        showFeedback(`❌ Nije točno. Pravi odgovor je: <strong>${escapeHtml(correctTxt)}</strong>.`);
-      }
-
-      updateHud();
-      document.getElementById("btn-next").style.display = "inline-block";
-    }
-
-    function renderSentence(item, rankLabel) {
-      const container = document.getElementById("game-content");
-      container.innerHTML = `
-        <div class="q-meta">
-          <span class="clue-banner">Trag: ${escapeHtml(item.clue)}</span>
-          <span class="badge">${rankLabel} · ${state.maxTime}s (+5s po pogođenom slovu)</span>
-        </div>
-        <div id="sentence-board" class="sentence-board"></div>
-        <div id="big-keyboard" class="big-keyboard"></div>
-      `;
-
-      drawSentenceTiles(item.text);
-
-      const kb = document.getElementById("big-keyboard");
-      KEYBOARD_LETTERS.forEach(ch => {
-        const kBtn = document.createElement("button");
-        kBtn.type = "button";
-        kBtn.className = "key-btn";
-        kBtn.textContent = ch;
-        kBtn.onclick = () => guessLetter(ch, kBtn, item.text);
-        kb.appendChild(kBtn);
-      });
-    }
-
-    function normalizeChar(c) {
-      return c.toUpperCase();
-    }
-
-    function isGuessableLetter(ch) {
-      return /[A-ZČĆĐŠŽ]/i.test(ch);
-    }
-
-    function drawSentenceTiles(text) {
-      const board = document.getElementById("sentence-board");
-      board.innerHTML = "";
-      const words = text.split(" ");
-
-      words.forEach(word => {
-        const group = document.createElement("div");
-        group.className = "word-group";
-
-        [...word].forEach(ch => {
-          const tile = document.createElement("span");
-          if (!isGuessableLetter(ch)) {
-            tile.className = "letter-tile punct";
-            tile.textContent = ch;
-          } else {
-            tile.className = "letter-tile";
-            const revealed = state.answered || state.guessedLetters.has(normalizeChar(ch));
-            tile.textContent = revealed ? normalizeChar(ch) : "";
-          }
-          group.appendChild(tile);
-        });
-
-        board.appendChild(group);
-      });
-    }
-
-    function guessLetter(ch, btn, targetText) {
-      if (state.answered || state.guessedLetters.has(ch)) return;
-      state.guessedLetters.add(ch);
-      btn.disabled = true;
-
-      const upperTarget = normalizeChar(targetText);
-      const hit = upperTarget.includes(ch);
-
-      if (hit) {
-        btn.classList.add("hit");
-        state.timerLeft = Math.min(state.maxTime, state.timerLeft + 5);
-        showFeedback(`⏱️ Pogodak! Dodano <strong>+5s</strong> vremena.`);
-      } else {
-        btn.classList.add("miss");
-        state.wrongGuesses += 1;
-      }
-
-      drawSentenceTiles(targetText);
-      updateHud();
-
-      const allSolved = [...upperTarget].every(c => !isGuessableLetter(c) || state.guessedLetters.has(c));
-      if (allSolved) {
-        state.answered = true;
-        clearTimer();
-        document.querySelectorAll("#big-keyboard .key-btn").forEach(b => (b.disabled = true));
-
-        const mult = RANK_TIMES[state.rank].mult;
-        const letterPenalty = state.wrongGuesses * 12;
-        const speedBonus = Math.round((state.timerLeft / state.maxTime) * 60);
-        const rawScore = Math.max(15, 110 - letterPenalty + speedBonus);
-        const pts = Math.round(rawScore * mult);
-
-        state.scores[state.turnIndex] += pts;
-        showFeedback(
-          `🎉 Rečenica otključana! +${pts} bodova (promašaja: ${state.wrongGuesses}, bonus brzine: +${speedBonus}).`
-        );
-        updateHud();
-        document.getElementById("btn-next").style.display = "inline-block";
-      }
-    }
-
-    function handleTimeout() {
-      state.answered = true;
-      if (state.currentKind === "mcq") {
-        const allBtns = document.querySelectorAll("#mcq-opts .opt-btn");
-        allBtns.forEach(b => (b.disabled = true));
-        const correctTxt = state.currentItem.opts[state.currentItem.ans];
-        showFeedback(`⏱️ Isteklo vrijeme! Pravi odgovor je: <strong>${escapeHtml(correctTxt)}</strong>.`);
-      } else {
-        document.querySelectorAll("#big-keyboard .key-btn").forEach(b => (b.disabled = true));
-        drawSentenceTiles(state.currentItem.text);
-        showFeedback(`⏱️ Isteklo vrijeme! Rečenica je bila: <strong>${escapeHtml(state.currentItem.text)}</strong>.`);
-      }
-      document.getElementById("btn-next").style.display = "inline-block";
-    }
-
-    function showFeedback(htmlMsg) {
-      const fb = document.getElementById("feedback-box");
-      fb.innerHTML = htmlMsg;
-      fb.classList.add("show");
+    function showFeedback(mainMsg, triviaMsg = "") {
+      const box = document.getElementById("feedback-box");
+      if (!box) return;
+      const triviaHtml = triviaMsg
+        ? `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(34,38,44,0.22); font-weight:700; color:#0f766e;">💡 ${escapeHtml(triviaMsg)}</div>`
+        : "";
+      box.innerHTML = `<div>${escapeHtml(mainMsg)}</div>${triviaHtml}`;
+      box.className = "feedback-box show";
     }
 
     function nextTurn() {
-      if (state.playMode === "team") {
-        state.turnIndex = state.turnIndex === 0 ? 1 : 0;
-        if (state.turnIndex === 0) state.roundNum += 1;
-      } else {
-        state.roundNum += 1;
-      }
-
-      if (state.roundNum > state.maxRounds) {
-        finishAndSaveScores();
-      } else {
-        loadRound();
-      }
+      state.round += 1;
+      if (state.round > state.maxRounds) finishGame();
+      else setupTurn();
     }
 
     function endGameEarly() {
+      finishGame();
+    }
+
+    function finishGame() {
       clearTimer();
-      finishAndSaveScores();
+      const qState = getDailyQuotaState();
+      const usedToday = qState.freeUsed || 0;
+      const pName = state.players[0] || FUNNY_NICKS[0];
+
+      const sevenPlusBonus = state.correctCount >= 7 ? 150 : 0;
+      const pts = (state.scores[0] || 0) + sevenPlusBonus;
+      state.scores[0] = pts;
+
+      recordScoreToBoard(pName, pts);
+      const totalOnBoard = getPlayerBoardPoints(pName);
+      const leader = getLeaderInfo();
+      const leaderText = leader
+        ? ` · Trenutačno vodi: #1 ${leader.name} (${leader.score} bod)`
+        : "";
+      const bonusText = sevenPlusBonus > 0
+        ? ` · 🎉 Nagrada za ${state.correctCount} točnih odgovora (7+): +${sevenPlusBonus} bod!`
+        : ` · Točnih odgovora: ${state.correctCount}`;
+
+      state.lastSummary = `Odigrano igrica danas: ${usedToday} · ${pName}: +${pts} bod (ukupno: ${totalOnBoard} bod)${bonusText}${leaderText}`;
+      openLeaderboard(true);
     }
 
-    function buildGameSummary() {
-      if (state.playMode === "team") {
-        const [n1, n2] = state.players;
-        const [s1, s2] = state.scores;
-        if (s1 > s2) return `Pobjednik runde: ${n1} (${s1} bod. prema ${s2} bod. za ${n2}).`;
-        if (s2 > s1) return `Pobjednik runde: ${n2} (${s2} bod. prema ${s1} bod. za ${n1}).`;
-        return `Neriješeno u rundi! ${n1} i ${n2} imaju po ${s1} bod.`;
-      }
-      return `${state.players[0]} je završio/la rundu sa ${state.scores[0]} bod.`;
-    }
-
-    function finishAndSaveScores() {
-      const weekKey = getCurrentWeekKey();
-      const store = getWeeklyStore();
-      const currentWeekRows = Array.isArray(store[weekKey]) ? store[weekKey] : [];
-
-      state.players.forEach((name, idx) => {
-        currentWeekRows.push({
-          name,
-          mode: state.playMode === "team" ? "Tim" : "Solo",
-          score: state.scores[idx],
-          ts: Date.now()
-        });
-      });
-
-      currentWeekRows.sort((a, b) => b.score - a.score);
-      store[weekKey] = currentWeekRows.slice(0, 20);
-      localStorage.setItem(STORAGE_WEEKLY_BOARD, JSON.stringify(store));
-
-      const summary = buildGameSummary();
-      state.lastSummary = summary;
-      openLeaderboard(summary);
-    }
-
-    function getWeeklyStore() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_WEEKLY_BOARD) || "{}");
-      } catch {
-        return {};
-      }
-    }
-
-    function getCurrentWeekBoard() {
-      const weekKey = getCurrentWeekKey();
-      const store = getWeeklyStore();
-      const rows = Array.isArray(store[weekKey]) ? store[weekKey] : [];
-      return [...rows].sort((a, b) => b.score - a.score);
-    }
-
-    function renderLeaderboard(summaryText = "") {
-      const weekKey = getCurrentWeekKey();
-      document.getElementById("week-badge").textContent = `Tjedan ${weekKey}`;
-
+    function openLeaderboard(showBanner = false) {
+      goScreen("screen-board");
       const banner = document.getElementById("game-summary-banner");
-      const textToShow = summaryText || state.lastSummary;
-      if (textToShow) {
-        banner.textContent = textToShow;
-        banner.classList.add("show");
-      } else {
-        banner.textContent = "";
-        banner.classList.remove("show");
+      if (banner) {
+        if (showBanner && state.lastSummary) {
+          banner.textContent = state.lastSummary;
+          banner.className = "summary-banner show";
+        } else {
+          banner.className = "summary-banner";
+          banner.textContent = "";
+        }
       }
 
       const list = document.getElementById("leaderboard-list");
-      const rows = getCurrentWeekBoard();
-      if (rows.length === 0) {
-        list.innerHTML = `<li class="board-item"><span>Još nema upisanih rezultata za tjedan ${escapeHtml(weekKey)}.</span><span class="muted">0 bod.</span></li>`;
+      const board = loadBoard();
+      if (!list) return;
+      if (!board.length) {
+        list.innerHTML = `<li class="board-item"><span class="muted">Još nema spremljenih bodova za ovaj tjedan.</span></li>`;
         return;
       }
-
-      list.innerHTML = rows
-        .map((r, i) => `
-          <li class="board-item">
-            <span><span class="board-rank">#${i + 1}</span>${escapeHtml(r.name)} <span class="muted">(${escapeHtml(r.mode || "Solo")})</span></span>
-            <span>${r.score} bod.</span>
-          </li>
-        `)
-        .join("");
+      list.innerHTML = board.map((entry, idx) => `
+        <li class="board-item">
+          <span><span class="board-rank">#${idx + 1}</span>${escapeHtml(entry.name)}${idx === 0 ? " 👑" : ""}</span>
+          <span>${entry.score} bod</span>
+        </li>
+      `).join("");
     }
 
     function escapeHtml(str) {
-      return String(str)
+      return String(str || "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
 
-    // Inicijalni nadimci pri učitavanju
-    randomizeNick(1);
-    randomizeTeam(1);
-    randomizeTeam(2);
-    updatePoolStatus();
+    window.addEventListener("DOMContentLoaded", () => {
+      selectPlayMode("solo");
+      updateQuotaLabels();
+      updatePoolStatus();
+    });
   </script>
-
-  <!-- GoatCounter praćenje posjeta -->
-  <script data-goatcounter="https://skolicakviz.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
