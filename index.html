@@ -2628,12 +2628,18 @@
       document.getElementById("btn-next").style.display = "inline-block";
     }
 
-  const fallbackFromPool = (typeof SENTENCES_POOL !== "undefined" && Array.isArray(SENTENCES_POOL))
-    ? SENTENCES_POOL.find(s =>
-        (item?.id && s.id === item.id) ||
-        (item?.clue && s.clue && String(s.clue).trim().toLowerCase() === String(item.clue).trim().toLowerCase())
-      )
-    : null;
+    const backupList = [
+    { clue: "Poslovica", text: "TKO RANO RANI DVIJE SREĆE GRABI" },
+    { clue: "Izreka", text: "GDJE IMA VOLJE TU JE I NAČIN" },
+    { clue: "Mudrost", text: "ZNANJE JE BLAGO KOJE SVUGDJE PRATI SVOGA VLASNIKA" }
+  ];
+
+  const pool = (typeof SENTENCES_POOL !== "undefined" && Array.isArray(SENTENCES_POOL) && SENTENCES_POOL.length)
+    ? SENTENCES_POOL
+    : backupList;
+
+  const fallbackFromPool = pool[(Math.abs((Number(state?.round || 1) - 1))) % pool.length] || backupList[0];
+
 
   const rawSentence =
     getSentenceText(item) ||
