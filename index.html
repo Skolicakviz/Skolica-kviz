@@ -2651,6 +2651,11 @@
     "TKO RANO RANI DVIJE SREĆE GRABI";
 
   const sentence = String(rawSentence).trim();
+        state.activeSentenceText = sentence;
+  if (typeof state.timeLeft === "number" && state.timeLeft < 60) {
+    state.timeLeft += 25;
+  }
+
   const words = sentence.split(/\s+/).filter(Boolean);
 
   const boardHtml = words.map(word => {
@@ -2713,51 +2718,49 @@
 
 
     function submitFullSentence() {
-      if (state.answered) return;
-      const inputEl = document.getElementById("full-sentence-input");
-      const guessRaw = (inputEl?.value || "").trim();
-      if (!guessRaw) return;
+  if (state.answered) return;
+  const inputEl = document.getElementById("full-sentence-input");
+  const guessRaw = (inputEl?.value || "").trim();
+  if (!guessRaw) return;
 
-      const item = state.currentItem;
-      const targetSentence = getSentenceText(item);
-      const rankCfg = RANK_TIMES[state.rank] || RANK_TIMES.srebro;
-      const trivia = getTriviaText(item);
+  const item = state.currentItem;
+  const targetSentence = String(
+    state.activeSentenceText ||
+    (typeof getSentenceText === "function" ? getSentenceText(item) : "") ||
+    item?.sentence ||
+    item?.text ||
+    item?.answer ||
+    ""
+  ).trim();
 
-      if (normalizeSentenceCompare(guessRaw) === normalizeSentenceCompare(targetSentence)) {
-        state.answered = true;
-        clearTimer();
-        [...targetSentence.toUpperCase()].forEach(ch => {
-          if (/[A-ZČĆŽŠĐ]/.test(ch)) state.guessedLetters.add(ch);
-        });
-        renderSentenceRound(item, rankCfg);
-        document.querySelectorAll(".key-btn, #full-sentence-input").forEach(el => {
-          el.disabled = true;
-        });
+  if (!targetSentence) return;
 
-        const basePts = 180 + state.timeLeft * 7;
-        const { earned, streakBonus } = registerCorrectAnswer(basePts, rankCfg);
-        state.sentenceBonusTime = 5;
-        const streakMsg = streakBonus > 0 ? ` (uključen niz bonus!)` : "";
-        document.getElementById("hud-round").textContent = `${state.round}/${state.maxRounds} · Točno: ${state.correctCount}`;
-        showFeedback(`Odlično! Pogodila si cijelu rečenicu! +${earned} bodova${streakMsg} i +5s bonusa na sljedećoj rečenici.`, trivia);
-        document.getElementById("btn-next").style.display = "inline-block";
-      } else {
-        state.timeLeft = Math.max(0, state.timeLeft - 3);
-        updateTimerHud();
-        showFeedback(`Nije ta rečenica (-3s). Možeš pokušati ponovno ili birati slova ispod.`, trivia);
-        if (state.timeLeft <= 0) {
-          state.answered = true;
-          clearTimer();
-          registerWrongAnswer();
-          renderSentenceRound(item, rankCfg);
-          document.querySelectorAll(".key-btn, #full-sentence-input").forEach(el => {
-            el.disabled = true;
-          });
-          showFeedback(`Vrijeme je isteklo! Rečenica je glasila: "${targetSentence}".`, trivia);
-          document.getElementById("btn-next").style.display = "inline-block";
-        }
+  const norm = s => String(s || "")
+    .toUpperCase()
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (norm(guessRaw) === norm(targetSentence)) {
+    state.answered = true;
+    if (typeof clearTimer === "function") clearTimer();
+    [...targetSentence].forEach(ch => {
+      if (/[A-Za-zČĆŽŠĐčćžšđ]/.test(ch) && state.guessedLetters?.add) {
+        state.guessedLetters.add(ch.toUpperCase());
       }
+    });
+    if (typeof renderSentenceRound === "function") {
+      renderSentenceRound(item, typeof RANK_TIMES !== "undefined" ? RANK_TIMES[state.rank] : null);
     }
+    if (typeof handleCorrectAnswer === "function") {
+      handleCorrectAnswer("sentence");
+    }
+  } else {
+    if (inputEl) {
+      inputEl.style.borderColor = "#dc2626";
+      setTimeout(() => { if (inputEl) inputEl.style.borderColor = ""; }, 500);
+    }
+  }
+}
 
     function guessSentenceLetter(letter) {
       if (state.answered || state.guessedLetters.has(letter)) return;
