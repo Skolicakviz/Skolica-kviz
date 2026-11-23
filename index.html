@@ -2628,10 +2628,24 @@
       document.getElementById("btn-next").style.display = "inline-block";
     }
 
-function renderSentenceRound(item, rankCfg) {
-  const rawSentence = getSentenceText(item);
+  const fallbackFromPool = (typeof SENTENCES_POOL !== "undefined" && Array.isArray(SENTENCES_POOL))
+    ? SENTENCES_POOL.find(s =>
+        (item?.id && s.id === item.id) ||
+        (item?.clue && s.clue && String(s.clue).trim().toLowerCase() === String(item.clue).trim().toLowerCase())
+      )
+    : null;
+
+  const rawSentence =
+    getSentenceText(item) ||
+    item?.phrase ||
+    item?.quote ||
+    item?.title ||
+    (fallbackFromPool ? getSentenceText(fallbackFromPool) : "") ||
+    "";
+
   const sentence = String(rawSentence || "").trim();
   const words = sentence ? sentence.split(/\s+/).filter(Boolean) : [];
+
 
   const boardHtml = words.length
     ? words.map(word => {
