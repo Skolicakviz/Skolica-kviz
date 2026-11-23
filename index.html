@@ -2753,7 +2753,15 @@
     }
     if (typeof handleCorrectAnswer === "function") {
       handleCorrectAnswer("sentence");
+    }     if (typeof showFeedback === "function") {
+      showFeedback("Rečenica pogođena!");
     }
+    const nextBtn = document.getElementById("btn-next");
+    if (nextBtn) {
+      nextBtn.style.display = "";
+      nextBtn.disabled = false;
+    }
+
   } else {
     if (inputEl) {
       inputEl.style.borderColor = "#dc2626";
