@@ -2767,7 +2767,8 @@
       state.guessedLetters.add(letter);
 
       const item = state.currentItem;
-      const sentence = getSentenceText(item).toUpperCase();
+      const sentence = String(state.activeSentenceText || (typeof getSentenceText === "function" ? getSentenceText(item) : "") || item?.sentence || item?.text || "").toUpperCase();
+
       if (!sentence.includes(letter)) {
         state.timeLeft = Math.max(0, state.timeLeft - 2);
         updateTimerHud();
