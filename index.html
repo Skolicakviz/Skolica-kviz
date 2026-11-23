@@ -1926,86 +1926,173 @@
       "M","N","NJ","O","P","R","S","Š","T","U","V","Z","Ž"
     ];
 
+    function svgDataUri(svgMarkup) {
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgMarkup.trim());
+    }
+
     const IMAGE_CHALLENGES = [
       {
         area: "Zastave svijeta",
-        q: "Koja država ima ovu prepoznatljivu zastavu sa sunčevim krugom?",
-        image: "https://flagcdn.com/w640/jp.png",
+        q: "Koja azijska otočna država ima ovu zastavu?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#ffffff"/>
+            <circle cx="150" cy="100" r="52" fill="#bc002d"/>
+          </svg>
+        `),
         opts: ["Japan", "Južna Koreja", "Tajvan", "Bangladeš"],
         ans: 0,
-        jesteLiZnali: "Japanska zastava naziva se Hinomaru ('sunčev krug'), a bijela podloga simbolizira čistoću i iskrenost."
+        jesteLiZnali: "Japanska zastava naziva se Hinomaru ('sunčev krug'), a crveni krug predstavlja izlazeće sunce."
       },
       {
         area: "Zastave svijeta",
-        q: "Koji je ovo državni stijeg sa zeleno-žuto-plavim motivom i zvijezdama?",
-        image: "https://flagcdn.com/w640/br.png",
-        opts: ["Brazil", "Kolumbija", "Argentina", "Ekvador"],
-        ans: 0,
-        jesteLiZnali: "Zvijezde na brazilskoj zastavi raspoređene su prema izgledu noćnog neba iznad Rio de Janeira ujutro 15. studenoga 1889."
-      },
-      {
-        area: "Zastave svijeta",
-        q: "Koja država ima ovaj nordijski križ?",
-        image: "https://flagcdn.com/w640/no.png",
+        q: "Koji je ovo nordijski stijeg?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#ba0c2f"/>
+            <rect x="82" y="0" width="44" height="200" fill="#ffffff"/>
+            <rect x="0" y="78" width="300" height="44" fill="#ffffff"/>
+            <rect x="93" y="0" width="22" height="200" fill="#00205b"/>
+            <rect x="0" y="89" width="300" height="22" fill="#00205b"/>
+          </svg>
+        `),
         opts: ["Norveška", "Švedska", "Danska", "Finska"],
         ans: 0,
-        jesteLiZnali: "Norveška zastava kombinira crvenu i bijelu (poput danske) s plavim križem (poput švedske i finske)."
+        jesteLiZnali: "Norveška zastava spojila je crveno-bijele boje danske zastave i plavu boju švedske zastave u nordijski križ."
       },
       {
         area: "Zastave svijeta",
-        q: "Čija je ovo zastava?",
-        image: "https://flagcdn.com/w640/ca.png",
-        opts: ["Kanada", "Peru", "Švicarska", "Austrija"],
-        ans: 0,
-        jesteLiZnali: "Kanadska zastava sa stiliziranim javorovim listom službeno je usvojena 1965. godine."
-      },
-      {
-        area: "Zastave svijeta",
-        q: "Kojoj državi pripada ova zastava?",
-        image: "https://flagcdn.com/w640/ma.png",
-        opts: ["Maroko", "Tunis", "Alžir", "Jordan"],
-        ans: 0,
-        jesteLiZnali: "Zelena pentagramska zvijezda na crvenoj podlozi predstavlja Salomonov pečat i pet stupova islama."
-      },
-      {
-        area: "Zastave svijeta",
-        q: "Koja otočna država na sjeveru Europe ima ovu zastavu?",
-        image: "https://flagcdn.com/w640/is.png",
+        q: "Koja otočna država sjevernog Atlantika ima ovu zastavu?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#02529c"/>
+            <rect x="82" y="0" width="44" height="200" fill="#ffffff"/>
+            <rect x="0" y="78" width="300" height="44" fill="#ffffff"/>
+            <rect x="93" y="0" width="22" height="200" fill="#dc1e35"/>
+            <rect x="0" y="89" width="300" height="22" fill="#dc1e35"/>
+          </svg>
+        `),
         opts: ["Island", "Farski otoci", "Norveška", "Škotska"],
         ans: 0,
-        jesteLiZnali: "Plava boja na islandskoj zastavi simbolizira more i nebo, bijela led i snijeg, a crvena vulkansku vatru."
+        jesteLiZnali: "Plava boja na islandskoj zastavi simbolizira ocean, bijela snijeg i gejzire, a crvena vulkansku lavu."
       },
       {
-        area: "Gradovi i znamenitosti",
-        q: "U kojem se gradu nalazi ova znamenitost?",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/640px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg",
-        opts: ["Pariz", "Lyon", "Marseille", "Bruxelles"],
+        area: "Zastave svijeta",
+        q: "Kojoj južnoameričkoj državi pripada ova zastava?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#009c3b"/>
+            <polygon points="150,24 274,100 150,176 26,100" fill="#ffdf00"/>
+            <circle cx="150" cy="100" r="46" fill="#002776"/>
+            <path d="M106,92 Q152,74 195,106" stroke="#ffffff" stroke-width="8" fill="none"/>
+          </svg>
+        `),
+        opts: ["Brazil", "Kolumbija", "Ekvador", "Bolivija"],
         ans: 0,
-        jesteLiZnali: "Eiffelov toranj ljeti može narasti i do 15 centimetara zbog toplinskog širenja željeza."
+        jesteLiZnali: "Na brazilskoj zastavi zelena predstavlja prašume, žuti romb bogatstvo zlata, a plavi krug zvjezdano nebo iznad Rija."
       },
       {
-        area: "Gradovi i znamenitosti",
-        q: "Koji je ovo grad poznat po kanalima i mostovima?",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Grand_Canal_Venice.jpg/640px-Grand_Canal_Venice.jpg",
-        opts: ["Venecija", "Firenca", "Verona", "Ravenna"],
+        area: "Zastave svijeta",
+        q: "Koja karipska država ima ovu dijagonalnu zastavu?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#009b3a"/>
+            <polygon points="0,0 150,100 0,200" fill="#000000"/>
+            <polygon points="300,0 150,100 300,200" fill="#000000"/>
+            <line x1="0" y1="0" x2="300" y2="200" stroke="#fed100" stroke-width="26"/>
+            <line x1="300" y1="0" x2="0" y2="200" stroke="#fed100" stroke-width="26"/>
+          </svg>
+        `),
+        opts: ["Jamajka", "Trinidad i Tobago", "Bahami", "Barbados"],
         ans: 0,
-        jesteLiZnali: "Povijesna jezgra Venecije izgrađena je na više od stotinu manjih otoka u venecijanskoj laguni."
+        jesteLiZnali: "Jamajka je jedina država na svijetu čija zastava ne sadrži ni crvenu, ni bijelu, ni plavu boju."
       },
       {
-        area: "Instrumenti",
-        q: "Koji gudački instrument je prikazan na slici?",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Violin_VL100.png/480px-Violin_VL100.png",
-        opts: ["Violina", "Viola", "Kontrabas", "Mandolina"],
+        area: "Zastave svijeta",
+        q: "Čija je ovo zastava s bijelim križem na crvenoj podlozi?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#d52b1e"/>
+            <rect x="132" y="42" width="36" height="116" fill="#ffffff"/>
+            <rect x="92" y="82" width="116" height="36" fill="#ffffff"/>
+          </svg>
+        `),
+        opts: ["Švicarska", "Austrija", "Danska", "Malta"],
         ans: 0,
-        jesteLiZnali: "Violina ima četiri žice najčešće ugođene na G3, D4, A4 i E5, u intervalima čistih kvinti."
+        jesteLiZnali: "Švicarska i Vatikan jedine su dvije suverene države na svijetu čije su službene zastave kvadratnog oblika."
+      },
+      {
+        area: "Zastave svijeta",
+        q: "Kojoj mediteranskoj državi pripada ova zastava?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#0d5eaf"/>
+            <rect y="22" width="300" height="22" fill="#ffffff"/>
+            <rect y="66" width="300" height="22" fill="#ffffff"/>
+            <rect y="110" width="300" height="22" fill="#ffffff"/>
+            <rect y="154" width="300" height="22" fill="#ffffff"/>
+            <rect width="110" height="110" fill="#0d5eaf"/>
+            <rect x="44" y="0" width="22" height="110" fill="#ffffff"/>
+            <rect x="0" y="44" width="110" height="22" fill="#ffffff"/>
+          </svg>
+        `),
+        opts: ["Grčka", "Urugvaj", "Izrael", "Cipar"],
+        ans: 0,
+        jesteLiZnali: "Devet pruga na grčkoj zastavi odgovara devet slogova gesla 'Eleftheria i Thanatos' (Sloboda ili smrt)."
+      },
+      {
+        area: "Znamenitosti i gradovi",
+        q: "Koja poznata građevina i grad su prikazani na ilustraciji?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#dbeafe"/>
+            <rect y="168" width="300" height="32" fill="#64748b"/>
+            <polygon points="150,18 136,75 164,75" fill="#334155"/>
+            <polygon points="132,75 168,75 182,122 118,122" fill="#475569"/>
+            <polygon points="114,122 186,122 206,168 176,168 164,142 136,142 124,168 94,168" fill="#1e293b"/>
+            <line x1="150" y1="6" x2="150" y2="20" stroke="#1e293b" stroke-width="4"/>
+          </svg>
+        `),
+        opts: ["Pariz (Eiffelov toranj)", "London (Big Ben)", "Berlin (TV toranj)", "Toronto (CN Tower)"],
+        ans: 0,
+        jesteLiZnali: "Eiffelov toranj u Parizu visok je 330 metara i bio je najviša građevina na svijetu punih 41 godinu."
+      },
+      {
+        area: "Glazbeni instrumenti",
+        q: "Koji udaraljkaški instrument s tipkama i rezonatorima vidiš na slici?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#fef3c7"/>
+            <rect x="35" y="65" width="230" height="16" rx="4" fill="#78350f"/>
+            <rect x="46" y="45" width="22" height="65" rx="3" fill="#d97706"/>
+            <rect x="76" y="48" width="22" height="58" rx="3" fill="#b45309"/>
+            <rect x="106" y="51" width="22" height="52" rx="3" fill="#d97706"/>
+            <rect x="136" y="54" width="22" height="46" rx="3" fill="#b45309"/>
+            <rect x="166" y="57" width="22" height="40" rx="3" fill="#d97706"/>
+            <rect x="196" y="60" width="22" height="34" rx="3" fill="#b45309"/>
+            <rect x="226" y="63" width="22" height="28" rx="3" fill="#d97706"/>
+            <line x1="55" y1="81" x2="45" y2="165" stroke="#451a03" stroke-width="6"/>
+            <line x1="245" y1="81" x2="255" y2="165" stroke="#451a03" stroke-width="6"/>
+          </svg>
+        `),
+        opts: ["Ksilofon", "Harmonika", "Harfa", "Orgulje"],
+        ans: 0,
+        jesteLiZnali: "Naziv ksilofon dolazi od grčkih riječi 'xylon' (drvo) i 'phone' (zvuk), jer su mu pločice izvorno drvene."
       },
       {
         area: "Alati",
-        q: "Koji je točan naziv ovog alata?",
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Claw-hammer.jpg/640px-Claw-hammer.jpg",
-        opts: ["Kandžasti čekić", "Macola", "Dlijeto", "Škripac"],
+        q: "Koji alat s pomičnim čeljustima vidiš na slici?",
+        image: svgDataUri(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+            <rect width="300" height="200" fill="#e2e8f0"/>
+            <rect x="52" y="90" width="155" height="22" rx="10" fill="#475569"/>
+            <circle cx="72" cy="101" r="6" fill="#cbd5e1"/>
+            <path d="M195,70 C235,68 252,85 252,101 C252,117 235,134 195,132 L195,114 L224,114 L224,88 L195,88 Z" fill="#334155"/>
+          </svg>
+        `),
+        opts: ["Viljuškasti / francuski ključ", "Libela", "Turpija", "Lemilica"],
         ans: 0,
-        jesteLiZnali: "Zakrivljeni rascjep na stražnjoj strani glave čekića služi kao poluga za čupanje čavala."
+        jesteLiZnali: "Podesivi (francuski) ključ patentirao je švedski izumitelj Johan Petter Johansson 1892. godine."
       }
     ];
 
@@ -2364,10 +2451,36 @@
 
     function getTriviaText(item) {
       if (!item || typeof item !== "object") return "";
-      const raw = item.jesteLiZnali || item.didYouKnow || item.zanimljivost || item.trivia || item.info || item.fact || "";
+      const raw =
+        item.jesteLiZnali ||
+        item.didYouKnow ||
+        item.zanimljivost ||
+        item.trivia ||
+        item.info ||
+        item.fact ||
+        item.explanation ||
+        "";
       const cleaned = String(raw || "").trim();
-      if (!cleaned) return "";
-      return /^jeste li znali\??\s*:?/i.test(cleaned) ? cleaned : `Jeste li znali? ${cleaned}`;
+      if (cleaned) {
+        return /^jeste li znali\??\s*:?/i.test(cleaned) ? cleaned : `Jeste li znali? ${cleaned}`;
+      }
+
+      const area = String(item.area || item.category || "Opće znanje").trim();
+      if (item.roundKind === "sentence" || item.type === "sentence") {
+        const sentenceText = getSentenceText(item);
+        const clueText = String(item.clue || "poznata izreka ili naslov").trim();
+        return `Jeste li znali? "${sentenceText}" spada u kategoriju "${clueText}" (${area}) i često se koristi kao prepoznatljiva referenca u općoj kulturi.`;
+      }
+
+      const opts = Array.isArray(item.options) ? item.options : [];
+      const correctIdx = typeof item.answer === "number" ? item.answer : 0;
+      const correctText = String(opts[correctIdx] || "").trim();
+      const qText = String(item.q || item.question || "").replace(/\?+$/, "").trim();
+
+      if (correctText) {
+        return `Jeste li znali? U području "${area}", točan pojam "${correctText}" veže se uz pitanje: ${qText}.`;
+      }
+      return `Jeste li znali? Ovo pitanje dolazi iz kategorije "${area}" i provjerava opću informiranost.`;
     }
 
     function getSentenceText(item) {
@@ -2463,7 +2576,7 @@
 
     function renderImageRound(item, rankCfg) {
       const opts = Array.isArray(item.options) ? item.options : [];
-      const imgUrl = escapeHtml(item.image || item.img || "");
+      const imgUrl = item.image || item.img || "";
       document.getElementById("game-content").innerHTML = `
         <div class="q-meta">
           <span class="badge">Runda slika</span>
@@ -2476,20 +2589,13 @@
             id="round-challenge-img"
             src="${imgUrl}"
             alt="${escapeHtml(item.q || "Slika za pogađanje")}"
-            style="max-width:100%; max-height:240px; border-radius:14px; object-fit:contain; background:rgba(255,255,255,0.65); padding:6px;"
-            onerror="handleRoundImageError()"
+            style="width:100%; max-width:340px; height:190px; border-radius:14px; object-fit:contain; background:#ffffff; border:2px solid rgba(34,38,44,0.16); padding:8px; box-shadow:0 4px 12px rgba(0,0,0,0.08);"
           />
         </div>
         <div class="options-grid">
           ${opts.map((opt, idx) => `<button type="button" class="opt-btn" onclick="answerMcq(${idx})">${escapeHtml(opt)}</button>`).join("")}
         </div>
       `;
-    }
-
-    function handleRoundImageError() {
-      const box = document.getElementById("image-round-box");
-      if (!box) return;
-      box.innerHTML = `<div class="clue-banner">Slika se trenutno nije uspjela učitati — odgovori prema ponuđenim opcijama ispod!</div>`;
     }
 
     function answerMcq(chosenIdx) {
@@ -2524,15 +2630,18 @@
 
     function renderSentenceRound(item, rankCfg) {
       const sentence = getSentenceText(item);
-      const boardHtml = sentence.split(" ").map(word => {
+      const words = sentence.split(" ").filter(Boolean);
+
+      const boardHtml = words.map(word => {
         const tiles = [...word].map(ch => {
           if (!/[A-Za-zČĆŽŠĐčćžšđ]/.test(ch)) {
-            return `<span class="letter-tile punct">${escapeHtml(ch)}</span>`;
+            return `<span style="display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:36px; font-weight:800; font-size:1.1rem; color:#1e293b;">${escapeHtml(ch)}</span>`;
           }
-          const revealed = state.answered || state.guessedLetters.has(ch.toUpperCase());
-          return `<span class="letter-tile">${revealed ? escapeHtml(ch.toUpperCase()) : ""}</span>`;
+          const upper = ch.toUpperCase();
+          const revealed = state.answered || state.guessedLetters.has(upper);
+          return `<span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:38px; border-radius:8px; background:${revealed ? "#ecfdf5" : "#ffffff"}; border:2px solid ${revealed ? "#059669" : "#94a3b8"}; border-bottom:4px solid ${revealed ? "#047857" : "#334155"}; font-weight:900; font-size:1.1rem; color:#0f172a; box-shadow:0 2px 4px rgba(0,0,0,0.06);">${revealed ? escapeHtml(upper) : "_"}</span>`;
         }).join("");
-        return `<span class="word-group">${tiles}</span>`;
+        return `<span style="display:inline-flex; flex-wrap:wrap; gap:4px; margin:4px 8px;">${tiles}</span>`;
       }).join("");
 
       const keysHtml = CRO_ALPHABET.map(letter => {
@@ -2549,7 +2658,12 @@
           <span class="badge">${rankCfg.label} · Reč. ${rankCfg.sentence}s</span>
         </div>
         <div class="clue-banner">Trag: ${escapeHtml(item.clue || "Pogodi rečenicu")}</div>
-        <div class="sentence-board">${boardHtml}</div>
+        <div
+          id="sentence-slots-board"
+          style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px; margin:12px 0; padding:12px 8px; border-radius:14px; background:rgba(255,255,255,0.72); border:1.5px dashed rgba(34,38,44,0.22);"
+        >
+          ${boardHtml}
+        </div>
         <div class="nick-row" style="margin-bottom:10px;">
           <input
             id="full-sentence-input"
@@ -2783,3 +2897,6 @@
 </body>
 </html>
 
+
+      
+      
